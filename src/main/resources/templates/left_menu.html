@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<body>
+<!--  菜单主体 start  -->
+<div class="left-nav" th:fragment="leftMenuBody">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:">
+                    <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe6b8;</i>
+                    <cite>系统管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('用户管理','/user/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>用户管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('角色管理','/role/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>角色管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('资源权限管理','/permission/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>资源权限管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('日志管理','/log/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>日志管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:">
+                    <i class="iconfont left-nav-li" lay-tips="业务管理">&#xe723;</i>
+                    <cite>业务管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('订单管理','/order/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>订单管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('产品管理','/product/elements/1/5')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>产品管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--  菜单主体 end  -->
+</body>
+
+</html>

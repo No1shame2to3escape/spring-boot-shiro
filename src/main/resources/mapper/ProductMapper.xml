@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.ProductMapper">
+
+    <!--  查询  -->
+    <select id="findList" parameterType="pageBean" resultMap="product_specification">
+        select *
+        from tab_product limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findElementById" resultMap="product_specification">
+        select *
+        from tab_product
+        where id = #{id}
+    </select>
+    <select id="findTotalCount" resultType="int">
+        select count(*)
+        from tab_product
+    </select>
+    <select id="findByProductName" resultMap="product_specification">
+        select *
+        from tab_product
+        where productName = #{productName}
+    </select>
+    <!--  查询  -->
+
+    <!-- 添加   -->
+    <insert id="create" parameterType="product">
+        insert into tab_product(id,productNum,name,productDesc,status)
+        values(#{id},#{productNum},#{name},#{productDesc},#{status})
+    </insert>
+    <!-- 添加   -->
+
+    <!-- 删除   -->
+    <delete id="delete" parameterType="product">
+        delete from tab_product
+        where id = #{id}
+    </delete>
+    <!-- 删除   -->
+
+    <!--  修改  -->
+    <update id="update" parameterType="product">
+        update tab_product
+        set productName = #{productName}, productDesc = #{productDesc}, status = #{status}, gmt_modified = #{gmt_modified}
+        where id = #{id}
+    </update>
+    <!--  修改  -->
+
+    <!-- resultMap   -->
+    <resultMap id="product_specification" type="product">
+        <result property="productNum" column="productNum"/>
+        <collection property="productSpecificationList" column="productNum" select="findProductSpecificationList"/>
+    </resultMap>
+    <!-- resultMap   -->
+
+    <!--  二次查询  -->
+    <select id="findProductSpecificationList" resultType="productSpecification">
+        select *
+        from tab_product_specification
+        where productNum = #{productNum}
+    </select>
+    <!--  二次查询  -->
+
+</mapper>

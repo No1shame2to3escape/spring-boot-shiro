@@ -1,0 +1,210 @@
+package cn.realphago.springbootshiro.pojo;
+
+import cn.realphago.springbootshiro.uitl.DateFormatUtils;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * @author gaoyizhong
+ * @create 2020/09/2020/9/6 13:54
+ */
+public class User {
+
+    private String id;
+    private String userNum;
+    private String username;
+    private String password;
+    private Integer gender;
+    private String str_gender;
+    private String name;
+    private String salt;
+    private Integer status;
+    private String str_status;
+    private List<Role> roleList;
+    private Date gmt_create;
+    private String str_gmt_create;
+    private Date gmt_modified;
+    private String str_gmt_modified;
+
+    public User() {
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", userNum='" + userNum + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", gender=" + gender +
+                ", str_gender='" + str_gender + '\'' +
+                ", name='" + name + '\'' +
+                ", salt='" + salt + '\'' +
+                ", status=" + status +
+                ", str_status='" + str_status + '\'' +
+                ", roleList=" + roleList +
+                ", gmt_create=" + gmt_create +
+                ", str_gmt_create='" + str_gmt_create + '\'' +
+                ", gmt_modified=" + gmt_modified +
+                ", str_gmt_modified='" + str_gmt_modified + '\'' +
+                '}';
+    }
+
+    public User(String username, String password, String name, String salt, Integer status) {
+        this(UUID.randomUUID().toString(),
+                DateFormatUtils.getOrderNum("User"),
+                username,
+                password,
+                1,
+                name,
+                salt,
+                status);
+    }
+
+    public User(String username, String password, String name) {
+        this(username,
+                password,
+                name,
+                null,
+                1);
+    }
+
+    public User(String id, String userNum, String username, String password, Integer gender, String name, String salt, Integer status) {
+        this.id = id;
+        this.userNum = userNum;
+        this.username = username;
+        this.password = password;
+        this.gender = gender;
+        this.name = name;
+        this.salt = salt;
+        this.status = status;
+    }
+
+    public Date getGmt_create() {
+        return gmt_create;
+    }
+
+    public void setGmt_create(Date gmt_create) {
+        this.gmt_create = gmt_create;
+    }
+
+    public Date getGmt_modified() {
+        return gmt_modified;
+    }
+
+    public void setGmt_modified(Date gmt_modified) {
+        this.gmt_modified = gmt_modified;
+    }
+
+    public String getStr_status() {
+        if (status != null) {
+            return status == 0 ? "关闭" : "开启";
+        }
+        return "未知";
+    }
+
+    public String getStr_gmt_create() {
+        if (gmt_create != null) {
+            return DateFormatUtils.format(gmt_create);
+        }
+        return "未知";
+    }
+
+    public String getStr_gmt_modified() {
+        if (gmt_modified != null) {
+            return DateFormatUtils.format(gmt_modified);
+        }
+        return "未知";
+    }
+
+    public boolean hasRole(Role role) {
+        boolean flag = false;
+        for (Role role1 : roleList) {
+            if (role1.equals(role)) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getStr_gender() {
+        if (gender != null) {
+            return gender == 0 ? "女" : "男";
+        }
+        return "未知";
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

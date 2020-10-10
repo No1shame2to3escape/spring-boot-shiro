@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.UserMapper">
+
+    <!-- 查询   -->
+    <select id="findUserByUsername" resultMap="user_roles">
+        select * from tab_user
+        where username = #{username}
+    </select>
+    <select id="findList" parameterType="pageBean" resultMap="user_roles">
+        select *
+        from tab_user limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findTotalCount" resultType="int">
+        select count(*)
+        from tab_user
+    </select>
+
+    <!-- 添加   -->
+    <insert id="create" parameterType="user">
+        insert into tab_user(id, userNum, username, password, gender, name, salt, status)
+        values(#{id}, #{userNum}, #{username}, #{password}, #{gender}, #{name}, #{salt}, #{status})
+    </insert>
+    <insert id="authorize">
+        insert into tab_user_role(userNum,roleNum)
+        values(#{user.userNum},#{role.userNum})
+    </insert>
+
+    <!-- 删除    -->
+    <delete id="delete" parameterType="user">
+        delete from tab_user
+        where id = #{id}
+    </delete>
+
+    <!--  更新  -->
+    <update id="update" parameterType="user">
+        update tab_user
+        set name=#{name}, gender=#{gender}, salt=#{salt}, gmt_modified=#{gmt_modified}
+        where id = #{id}
+    </update>
+    <update id="updateStatus">
+        update tab_user
+        set status=#{status}
+        where id = #{id}
+    </update>
+
+    <!-- resultMap   -->
+    <resultMap id="user_roles" type="user">
+        <result column="userNum" property="userNum"/>
+        <collection column="userNum" property="roleList" ofType="role" select="findUserRoles"/>
+    </resultMap>
+    <resultMap id="role_permissionList" type="role">
+        <result column="roleNum" property="roleNum"/>
+        <collection property="permissionList" column="roleNum" ofType="permission" select="findRolePermissions"/>
+    </resultMap>
+
+    <!-- 二次查询   -->
+    <select id="findUserRoles" resultMap="role_permissionList">
+        select *
+        from tab_role
+        where roleNum in (select roleNum from tab_user_role where userNum = #{userNum})
+    </select>
+    <select id="findRolePermissions" resultType="permission">
+        SELECT *
+        FROM tab_permission
+        WHERE permissionNum IN (SELECT permissionNum FROM tab_role_permission WHERE roleNum = #{roleNum} )
+    </select>
+
+
+</mapper>

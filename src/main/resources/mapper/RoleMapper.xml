@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.RoleMapper">
+
+    <!-- 查询   -->
+    <select id="findElementById" resultMap="role_permissionList">
+        select *
+        from tab_role
+        where id = #{id}
+    </select>
+    <select id="findList" parameterType="pageBean" resultMap="role_permissionList">
+        select *
+        from tab_role limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findTotalCount" resultType="int">
+        select count(*)
+        from tab_role
+    </select>
+    <select id="findRoleLIstByUserNum" resultMap="role_permissionList">
+        select *
+        from tab_role
+        where roleNum in (select roleNum from tab_user_role where userNum = #{userNum})
+    </select>
+    <select id="findElementByName" resultMap="role_permissionList">
+        select *
+        from tab_role
+        where name = #{name}
+    </select>
+    <!-- 查询   -->
+
+    <!-- 新增   -->
+    <insert id="create" parameterType="role">
+        insert into tab_role(id, roleNum, name, roleDesc)
+        values(#{id}, #{roleNum}, #{name}, #{roleDesc})
+    </insert>
+    <!--  授权  -->
+    <insert id="authorize">
+        insert into tab_user_role(userNum,roleNum)
+        values(#{user.userNum},#{role.roleNum})
+    </insert>
+    <!--  授权  -->
+    <!-- 新增   -->
+
+    <!-- 删除   -->
+    <delete id="delete" parameterType="role">
+        delete from tab_role
+        where id = #{id}
+    </delete>
+    <delete id="deAuthorize" parameterType="user">
+        delete from tab_user_role
+        where userNum = #{userNum}
+    </delete>
+    <delete id="deAuthorizeByRoleNum">
+        delete from tab_user_role
+        where roleNum = #{roleNum}
+    </delete>
+    <!-- 删除   -->
+
+    <!--  修改  -->
+    <update id="update" parameterType="role">
+        update tab_role
+        set name = #{name}, roleDesc = #{roleDesc}, gmt_modified = #{gmt_modified}
+        where roleNum = #{roleNum}
+    </update>
+    <!--  修改  -->
+
+    <!--  resultMap  -->
+    <resultMap id="role_permissionList" type="role">
+        <result property="roleNum" column="roleNum"/>
+        <collection property="permissionList" column="roleNum" select="findRolePermissions" ofType="permission"/>
+    </resultMap>
+    <!--  resultMap  -->
+
+    <!-- 二次查找   -->
+    <select id="findRolePermissions" resultType="permission">
+        SELECT *
+        FROM tab_permission
+        WHERE permissionNum IN (SELECT permissionNum FROM tab_role_permission WHERE roleNum = #{roleNum} )
+    </select>
+    <!-- 二次查找   -->
+
+</mapper>

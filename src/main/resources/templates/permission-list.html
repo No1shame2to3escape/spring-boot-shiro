@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>权限列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/theme5.css"> -->
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<!-- 导航栏 -->
+<div class="x-nav">
+
+    <!-- 导航元素 -->
+    <span class="layui-breadcrumb">
+                    <a href="">首页</a>
+                    <a href="">演示</a>
+                    <a>
+                      <cite>导航元素</cite>
+                    </a>
+                  </span>
+
+    <!-- 刷新 -->
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+
+                <!- 功能性按钮 -->
+                <div class="layui-card-header">
+                    <button class="layui-btn" onclick="xadmin.open('添加角色','/permission/create',600,400)"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                </div>
+
+                <!-- 数据主体 -->
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form">
+
+                        <!-- 标题 -->
+                        <thead>
+                        <tr>
+                            <th onclick="checkAll()">
+                                <input type="checkbox" id="idCheckAll" lay-skin="primary">
+                            </th>
+                            <th>编号</th>
+                            <th>权限名</th>
+                            <th>url</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                        <!-- 数据 -->
+                        <tbody>
+                        <tr th:each="element : ${pageBean.elements}">
+                            <td>
+                                <input type="checkbox" name="ids" lay-skin="primary">
+                            </td>
+                            <td th:text="${element.permissionNum}"></td>
+                            <td th:text="${element.name}"></td>
+                            <td th:text="${element.url}">1</td>
+                            <td class="td-manage">
+                                <a title="编辑" th:onclick="xadmin.open('编辑','/permission/update/'+[[${element.id}]])"
+                                   href="javascript:">编辑</a>
+                                <a title="删除" th:onclick="member_del(this,[[${element.id}]])" href="javascript:">删除</a>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <!-- 分页数据 -->
+                <div id="layui-table-page1">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+
+                        <!-- 点击跳页 -->
+                        <!--    上一页         -->
+                        <a class="layui-laypage-prev layui-disabled" th:if="${pageBean.currentPage} == 1">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <a class="layui-laypage-prev" th:if="${pageBean.currentPage} > 1"
+                           th:onclick="preChangeCurrentPage([[${pageBean.currentPage}]])">
+                            <i class="layui-icon"></i>
+                        </a>
+
+                        <!--          首页          -->
+                        <span class="layui-laypage-curr" th:onclick="clickChangeCurrentPage(1)">
+                                    1
+                                </span>
+
+                        <span class="layui-laypage-spr">…</span>
+
+                        <!--      数值点击跳转          -->
+                        <span class="layui-laypage-curr"
+                              th:each="i : ${#numbers.sequence(pageBean.currentPage - 4,pageBean.currentPage - 1)}"
+                              th:onclick="clickChangeCurrentPage([[${i}]])" th:if="${pageBean.currentPage > 4}"
+                              th:text="${i}">
+                                </span>
+                        <span class="layui-laypage-curr" th:each="i : ${#numbers.sequence(1,pageBean.currentPage-1)}"
+                              th:onclick="clickChangeCurrentPage([[${i}]])"
+                              th:if="${pageBean.currentPage <= 4 && pageBean.currentPage > 1}" th:text="${i}">
+                                </span>
+                        <span class="layui-laypage-curr">
+                                    <em class="layui-laypage-em"></em>
+                                    <em th:text="${pageBean.currentPage}">1</em>
+                                </span>
+                        <span class="layui-laypage-curr"
+                              th:each="i : ${#numbers.sequence(pageBean.currentPage+1,pageBean.currentPage + 3)}"
+                              th:onclick="clickChangeCurrentPage([[${i}]])"
+                              th:if="${pageBean.totalPage > pageBean.currentPage && pageBean.totalPage - 3 > pageBean.currentPage}"
+                              th:text="${i}">
+                                </span>
+                        <span class="layui-laypage-curr"
+                              th:each="i : ${#numbers.sequence(pageBean.currentPage+1,pageBean.totalPage)}"
+                              th:onclick="clickChangeCurrentPage([[${i}]])"
+                              th:if="${pageBean.totalPage > pageBean.currentPage && pageBean.totalPage - 3 <= pageBean.currentPage}"
+                              th:text="${i}">
+                                </span>
+
+                        <span class="layui-laypage-spr">…</span>
+
+                        <!--        尾页             -->
+                        <a title="尾页" class="layui-laypage-last" th:text="${pageBean.totalPage}"
+                           th:onclick="clickChangeCurrentPage([[${pageBean.totalPage}]])">300000</a>
+
+                        <!--        下一页         -->
+                        <a class="layui-laypage-next layui-disabled" href="javascript:"
+                           th:if="${pageBean.currentPage} == ${pageBean.totalPage}">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <a class="layui-laypage-next " th:if="${pageBean.currentPage} < ${pageBean.totalPage}"
+                           th:onclick="lastChangeCurrentPage([[${pageBean.currentPage}]])">
+                            <i class="layui-icon"></i>
+                        </a>
+                        <!-- 点击跳页 -->
+
+                        <!-- 直接跳转 -->
+                        <span class="layui-laypage-skip">到第
+                                    <input class="layui-input" type="text" id="currentPage" min="1"
+                                           th:value="${pageBean.currentPage}">页
+                                    <button class="layui-laypage-btn" type="button"
+                                            onclick="changeCurrentPage(this)">确定</button>
+                                </span>
+                        <!-- 直接跳转 -->
+
+                        <!--     totalCount      -->
+                        <span class="layui-laypage-count"
+                              th:text="'共 ' + ${pageBean.totalCount} + ' 条' + '，' + ${pageBean.totalPage} + ' 页'">共 3000 条</span>
+                        <!--     totalCount      -->
+
+                        <!--     pageSize     -->
+                        <span class="layui-laypage-limits">
+                                    <select lay-ignore="" name="pageSize" onchange="changePageSize(this)">
+                                        <option disabled="disabled" th:text="${pageBean.pageSize} + ' 条/页'"
+                                                selected="selected"></option>
+                                        <option value="10">10 条/页</option>
+                                        <option value="20">20 条/页</option>
+                                        <option value="30">30 条/页</option>
+                                        <option value="40">40 条/页</option>
+                                        <option value="50">50 条/页</option>
+                                        <option value="60">60 条/页</option>
+                                        <option value="70">70 条/页</option>
+                                        <option value="80">80 条/页</option>
+                                        <option value="90">90 条/页</option>
+                                    </select>
+                                </span>
+                        <!--     pageSize     -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<!-- 功能性js -->
+<script>
+
+    layui.use(['laydate', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    <!-- 删除js -->
+    function member_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //发异步删除数据
+            $.post("/permission/delete", {id: id}, function (data) {
+
+            }, "json");
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!', {icon: 1, time: 1000});
+        });
+    }
+
+    <!-- 全选js -->
+    function checkAll() {
+        if ($("#idCheckAll")[0].checked) {
+            $("input[name = 'roles']").prop("checked", true);
+            var ss = $(".layui-form-checkbox");
+            $(".layui-form-checkbox").each(function (i) {
+                ss.eq(i).addClass("layui-form-checked");
+            });
+        } else {
+            $("input[name = 'roles']").prop("checked", false);
+            var ss = $(".layui-form-checkbox");
+            $(".layui-form-checkbox").each(function (i) {
+                ss.eq(i).removeClass("layui-form-checked");
+            });
+        }
+    }
+
+</script>
+
+<!-- 分页js -->
+<script>
+    function changePageSize(obj) {
+        var val = $(obj).val();
+        location.href = "http://localhost:9090/permission/elements/1/" + val;
+    }
+
+    function changeCurrentPage() {
+        var currentPage = $("#currentPage").val();
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = "http://localhost:9090/permission/elements/" + currentPage + "/" + pageSize;
+    }
+
+    function preChangeCurrentPage(currentPage) {
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = "http://localhost:9090/permission/elements/" + (currentPage - 1) + "/" + pageSize;
+    }
+
+    function lastChangeCurrentPage(currentPage) {
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = "http://localhost:9090/permission/elements/" + (currentPage + 1) + "/" + pageSize;
+    }
+
+    function clickChangeCurrentPage(currentPage) {
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = "http://localhost:9090/permission/elements/" + currentPage + "/" + pageSize;
+    }
+</script>
+
+</html>

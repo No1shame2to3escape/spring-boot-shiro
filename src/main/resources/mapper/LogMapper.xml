@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.LogMapper">
+
+    <!-- 分页查询 -->
+    <select id="findList" parameterType="pageBean" resultType="sysLog">
+        select *
+        from tab_syslog
+        <where>
+            <if test="parameterMap != null">
+                <if test="parameterMap.startTime != null">
+                    visitTime &gt;= #{parameterMap.startTime}
+                </if>
+                <if test="parameterMap.endTime != null">
+                    and visitTime &lt;= #{parameterMap.endTime}
+                </if>
+                <if test="parameterMap.ip != null">
+                    and ip like concat('%',#{parameterMap.ip},'%')
+                </if>
+                <if test="parameterMap.username != null">
+                    and username like concat('%',#{parameterMap.username},'%')
+                </if>
+                <if test="parameterMap.url != null">
+                    and url like concat('%',#{parameterMap.url},'%')
+                </if>
+            </if>
+        </where>
+        limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findTotalCount" resultType="int" parameterType="map">
+        select count(*)
+        from tab_syslog
+        <where>
+            <if test="parameterMap != null">
+                <if test="parameterMap.startTime != null">
+                    visitTime &gt;= #{parameterMap.startTime}
+                </if>
+                <if test="parameterMap.endTime != null">
+                    and visitTime &lt;= #{parameterMap.endTime}
+                </if>
+                <if test="parameterMap.ip != null">
+                    and ip like concat('%',#{parameterMap.ip},'%')
+                </if>
+                <if test="parameterMap.username != null">
+                    and username like concat('%',#{parameterMap.username},'%')
+                </if>
+                <if test="parameterMap.url != null">
+                    and url like concat('%',#{parameterMap.url},'%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 添加   -->
+    <insert id="create" parameterType="sysLog">
+        insert into tab_Syslog(id, visitTime, username, ip, url, executionTime, method)
+        values (#{id}, #{visitTime}, #{username}, #{ip}, #{url}, #{executionTime}, #{method})
+    </insert>
+
+</mapper>

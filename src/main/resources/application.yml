@@ -1,0 +1,21 @@
+#服务器配置
+server:
+  port: 9090
+
+#日志配置
+spring:
+  datasource:
+    username: root
+    password: 1024
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springboot_shiro?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&zeroDateTimeBehavior=CONVERT_TO_NULL
+  application:
+    name: spring-boot-shiro
+  thymeleaf:
+    cache: false
+  aop:
+    proxy-target-class: true
+
+mybatis:
+  type-aliases-package: cn.realphago.springbootshiro.pojo
+  mapper-locations: classpath:/mapper/*Mapper.xml
