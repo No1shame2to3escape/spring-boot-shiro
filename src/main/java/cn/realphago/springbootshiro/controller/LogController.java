@@ -5,6 +5,7 @@ import cn.realphago.springbootshiro.service.LogService;
 import cn.realphago.springbootshiro.uitl.CollectionUtils;
 import cn.realphago.springbootshiro.uitl.DateFormatUtils;
 import cn.realphago.springbootshiro.uitl.PageBeanUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class LogController {
     @Autowired
     private LogService service;
 
+    @RequiresPermissions(value = "log:find:*")
     @RequestMapping("/elements/{currentPage}/{pageSize}")
     public String findAll(Model model, @PathVariable("currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize, HttpServletRequest request) throws ParseException {
         //条件参数数据处理

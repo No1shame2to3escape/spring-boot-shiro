@@ -10,7 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductMapper extends AbstractMapper<Product> {
 
-    Product findByProductName(String productName);
+    Product findElementByProductNum(String productNum);
 
+    Integer updateStatus(String id, Integer status);
 
 }

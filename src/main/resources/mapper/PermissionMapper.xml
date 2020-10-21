@@ -5,9 +5,17 @@
 <mapper namespace="cn.realphago.springbootshiro.mapper.PermissionMapper">
 
     <!--  查询  -->
-    <select id="findList" parameterType="pageBean" resultType="permission">
+    <select id="findList" resultType="permission">
         select *
-        from tab_permission limit #{pageStart},#{pageSize}
+        from tab_permission
+        <where>
+            <if test="addtionParamMap != null and addtionParamMap.name != null ">
+                name like concat('', #{addtionParamMap.name}, '%')
+            </if>
+        </where>
+        <if test="pageBean != null">
+            limit #{pageBean.pageStart}, #{pageBean.pageSize}
+        </if>
     </select>
     <select id="findElementById" resultType="permission">
         select *
@@ -23,63 +31,67 @@
         from tab_permission
         where name = #{name}
     </select>
-    <select id="findAll" resultType="permission">
+    <select id="findElementLikeUrl" resultType="permission">
         select *
         from tab_permission
-        <where>
-            <if test="name != null">
-                name like concat('', #{name}, '%')
-            </if>
-        </where>
+        where url like concat('%',#{url},'%')
     </select>
-    <!--  查询  -->
+
+    <select id="findElementByPermissionNum" resultType="permission">
+        select *
+        from tab_permission
+        where permission_num = #{permissionNum}
+    </select>
 
     <!-- 添加   -->
     <insert id="create" parameterType="permission">
-        insert into tab_permission(id, permissionNum, name, url)
+        insert into tab_permission(id, permission_Num, name, url)
         values(#{id}, #{permissionNum}, #{name}, #{url})
     </insert>
-    <!-- 添加   -->
 
     <!-- 授权   -->
     <insert id="authorize">
-        insert into tab_role_permission(roleNum, permissionNum)
-        values(#{role.roleNum}, #{permission.permissionNum})
+        insert into tab_role_permission(role_num, permission_num)
+        values(#{roleNum}, #{permissionNum})
     </insert>
     <!-- 授权   -->
 
     <!-- 删除   -->
-    <delete id="delete" parameterType="permission">
+    <delete id="delete">
         delete from tab_permission
         where id = #{id}
     </delete>
-    <!-- 删除   -->
+
+    <!-- 删除（全部） -->
+    <delete id="deleteAll">
+        delete from tab_permission
+    </delete>
 
     <!-- 权限撤销   -->
     <delete id="deAuthorizeByRoleNum">
         delete from tab_role_permission
-        where roleNum = #{roleNum}
+        where role_num = #{roleNum}
     </delete>
     <delete id="deAuthorizeByPermissionNum">
         delete from tab_role_permission
-        where permissionNum = #{permissionNum}
+        where permission_num = #{permissionNum}
     </delete>
-    <!-- 权限撤销   -->
+    <delete id="deAuthorizeAll">
+        delete from tab_role_permission
+    </delete>
 
     <!--  修改  -->
     <update id="update" parameterType="permission">
         update tab_permission
-        set name =#{name},  url = #{url}, gmt_modified = #{gmt_modified}
-        where permissionNum = #{permissionNum}
+        set name = #{name},  url = #{url}, gmt_modified = CURRENT_TIMESTAMP
+        where permission_num = #{permissionNum}
     </update>
     <!--  修改  -->
 
     <!-- resultMap   -->
 
-    <!-- resultMap   -->
 
     <!--  二次查询  -->
 
-    <!--  二次查询  -->
 
 </mapper>

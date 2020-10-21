@@ -5,49 +5,49 @@
 <mapper namespace="cn.realphago.springbootshiro.mapper.LogMapper">
 
     <!-- 分页查询 -->
-    <select id="findList" parameterType="pageBean" resultType="sysLog">
+    <select id="findList" resultType="sysLog">
         select *
         from tab_syslog
         <where>
-            <if test="parameterMap != null">
-                <if test="parameterMap.startTime != null">
-                    visitTime &gt;= #{parameterMap.startTime}
+            <if test=" addtionParamMap != null">
+                <if test=" addtionParamMap.startTime != null">
+                    visit_time &gt;= #{ addtionParamMap.startTime}
                 </if>
-                <if test="parameterMap.endTime != null">
-                    and visitTime &lt;= #{parameterMap.endTime}
+                <if test=" addtionParamMap.endTime != null">
+                    and visit_time &lt;= #{ addtionParamMap.endTime}
                 </if>
-                <if test="parameterMap.ip != null">
-                    and ip like concat('%',#{parameterMap.ip},'%')
+                <if test=" addtionParamMap.ip != null">
+                    and ip like concat('%',#{ addtionParamMap.ip},'%')
                 </if>
-                <if test="parameterMap.username != null">
-                    and username like concat('%',#{parameterMap.username},'%')
+                <if test=" addtionParamMap.username != null">
+                    and username like concat('%',#{ addtionParamMap.username},'%')
                 </if>
-                <if test="parameterMap.url != null">
-                    and url like concat('%',#{parameterMap.url},'%')
+                <if test=" addtionParamMap.url != null">
+                    and url like concat('%',#{ addtionParamMap.url},'%')
                 </if>
             </if>
         </where>
-        limit #{pageStart},#{pageSize}
+        limit #{pageBean.pageStart},#{pageBean.pageSize}
     </select>
     <select id="findTotalCount" resultType="int" parameterType="map">
         select count(*)
         from tab_syslog
         <where>
-            <if test="parameterMap != null">
-                <if test="parameterMap.startTime != null">
-                    visitTime &gt;= #{parameterMap.startTime}
+            <if test=" addtionParamMap != null">
+                <if test=" addtionParamMap.startTime != null">
+                    visit_time &gt;= #{ addtionParamMap.startTime}
                 </if>
-                <if test="parameterMap.endTime != null">
-                    and visitTime &lt;= #{parameterMap.endTime}
+                <if test=" addtionParamMap.endTime != null">
+                    and visit_time &lt;= #{ addtionParamMap.endTime}
                 </if>
-                <if test="parameterMap.ip != null">
-                    and ip like concat('%',#{parameterMap.ip},'%')
+                <if test=" addtionParamMap.ip != null">
+                    and ip like concat('%',#{ addtionParamMap.ip},'%')
                 </if>
-                <if test="parameterMap.username != null">
-                    and username like concat('%',#{parameterMap.username},'%')
+                <if test=" addtionParamMap.username != null">
+                    and username like concat('%',#{ addtionParamMap.username},'%')
                 </if>
-                <if test="parameterMap.url != null">
-                    and url like concat('%',#{parameterMap.url},'%')
+                <if test=" addtionParamMap.url != null">
+                    and url like concat('%',#{ addtionParamMap.url},'%')
                 </if>
             </if>
         </where>
@@ -55,7 +55,7 @@
 
     <!-- 添加   -->
     <insert id="create" parameterType="sysLog">
-        insert into tab_Syslog(id, visitTime, username, ip, url, executionTime, method)
+        insert into tab_Syslog(id, visit_time, username, ip, url, execution_time, method)
         values (#{id}, #{visitTime}, #{username}, #{ip}, #{url}, #{executionTime}, #{method})
     </insert>
 

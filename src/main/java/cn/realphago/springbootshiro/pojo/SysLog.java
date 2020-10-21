@@ -2,13 +2,14 @@ package cn.realphago.springbootshiro.pojo;
 
 import cn.realphago.springbootshiro.uitl.DateFormatUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author gaoyizhong
  * @create 2020/09/2020/9/16 14:55
  */
-public class SysLog {
+public class SysLog implements Serializable {
 
     private String id;
     private Date visitTime;

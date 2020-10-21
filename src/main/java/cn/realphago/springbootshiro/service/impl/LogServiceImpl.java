@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 /**
  * @author gaoyizhong
  * @create 2020/09/2020/9/16 16:36
@@ -31,8 +33,8 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public PageBean<SysLog> findList(PageBean pageBean) {
-        return new PageBeanUtils<SysLog>(mapper).findList(pageBean);
+    public PageBean<SysLog> findList(PageBean pageBean, Map<String, Object> addtionParamMap) {
+        return new PageBeanUtils<SysLog>(mapper).findList(pageBean, addtionParamMap);
     }
 
 }

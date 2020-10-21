@@ -1,5 +1,6 @@
 package cn.realphago.springbootshiro.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import java.util.Map;
  * @author gaoyizhong
  * @create 2020/08/2020/8/8 20:07
  */
-public class PageBean<E> {
+public class PageBean<E> implements Serializable {
 
     private Integer currentPage;
     private Integer pageStart;

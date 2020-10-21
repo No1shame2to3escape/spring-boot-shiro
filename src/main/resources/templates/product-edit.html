@@ -29,19 +29,48 @@
     <div class="layui-row">
 
         <!-- 表单 -->
-        <form class="layui-form" id="createForm">
+        <form class="layui-form" id="updateForm">
+
+            <!-- 隐藏主键 -->
+            <input type="text" th:value="${product.id}" name="id" hidden/>
+
+            <!-- 产品价格 -->
+            <div class="layui-form-item" width="500px">
+                <label for="L_productNum" class="layui-form-label">
+                    <span class="x-red">*</span>价格
+                </label>
+                <div class="layui-input-inline" style="width: 220px">
+                    <input type="text" id="L_productNum" name="productNum" required=""
+                           autocomplete="off" class="layui-input" th:value="${product.productNum}" disabled
+                    />
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">* 固定值不可修改，修改后，功能不可用</span>
+                </div>
+            </div>
 
             <!-- 产品名 -->
             <div class="layui-form-item">
                 <label for="L_productName" class="layui-form-label">
                     <span class="x-red">*</span>产品名
                 </label>
-                <div class="layui-input-inline">
-                    <input type="text" id="L_productName" name="productName" required="" lay-verify="required"
+                <div class="layui-input-inline" style="width: 220px">
+                    <input type="text" id="L_productName" name="name" required="" lay-verify="required"
                            autocomplete="off" class="layui-input" th:value="${product.name}"/>
                 </div>
+            </div>
+
+            <!-- 产品价格 -->
+            <div class="layui-form-item">
+                <label for="L_price" class="layui-form-label">
+                    <span class="x-red">*</span>价格
+                </label>
+                <div class="layui-input-inline" style="width: 220px">
+                    <input type="number" id="L_price" name="price" required=""
+                           autocomplete="off" class="layui-input" th:value="${product.price}"/>
+                </div>
                 <div class="layui-form-mid layui-word-aux">
-                    <span class="x-red">*</span>产品名规则
+                    <span class="x-red">* 元/单位公斤</span>
                 </div>
             </div>
 
@@ -50,37 +79,19 @@
                 <label for="L_productDesc" class="layui-form-label">
                     <span class="x-red">*</span>产品描述
                 </label>
-                <div class="layui-input-inline">
-                            <textarea id="L_productDesc" name="productDesc" required="" lay-verify="required"
-                                      autocomplete="off" class="layui-textarea"
-                                      th:text="${product.productDesc}"></textarea>
+                <div class="layui-input-inline" style="width: 220px">
+                                    <textarea id="L_productDesc" name="productDesc" required="" lay-verify="required"
+                                              autocomplete="off" class="layui-textarea"
+                                              th:text="${product.productDesc}"></textarea>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>
                 </div>
             </div>
 
-            <!-- 产品规格 -->
-            <div class="layui-form-item" th:each="productSpecification : ${product.productSpecificationList}">
-                <label for="L_specification" class="layui-form-label">
-                    <span class="x-red">*</span>规格一
-                </label>
-                <div class="layui-input-inline">
-                    <input type="text" id="L_specification" name="specificationPrice"
-                           required="required" lay-verify="required" placeholder="规格价格" class="layui-input"
-                           th:value="${productSpecification.price}"/>
-                </div>
-                <div class="layui-input-inline">
-                    <input type="text" id="specificationDesc" name="specificationDesc" required="required"
-                           lay-verify="required" placeholder="规格描述" class="layui-input"
-                           th:value="${productSpecification.specificaionDesc}"/>
-                </div>
-
-            </div>
-
-            <!-- 添加按钮 -->
+            <!-- 修改按钮 -->
             <div class="layui-form-item">
-                <label for="L_specification" class="layui-form-label">
+                <label for="L_productDesc" class="layui-form-label">
                 </label>
                 <button class="layui-btn" lay-filter="add" lay-submit="">
                     修改
@@ -120,10 +131,13 @@
         form.on('submit(add)',
             function (data) {
 
+                <!-- 移除 disabled -->
+                $("#L_productNum").removeAttr("disabled");
+
                 <!-- 异步提交 -->
-                $.post("/product/create", $("#createForm").serialize(), function (resultInf) {
-                    if (resultInf.flag) {
-                        layer.alert("增加成功", {
+                $.post("/product/update", $("#updateForm").serialize(), function (success) {
+                    if (success.status == 200) {
+                        layer.alert(success.data, {
                                 icon: 6
                             },
                             function () {
@@ -134,17 +148,29 @@
                                 xadmin.father_reload();
                             });
                     } else {
-                        layer.alert("增加成功", {
+                        layer.alert(success.data, {
                                 icon: 6
                             },
                             function () {
+                                xadmin.close();
+                                xadmin.father_reload();
                             });
                     }
-                }, "json");
+                }, "json").error(
+                    function (xhr, status, info) {
+                        layer.alert("请求失败，请传入正确值并重新尝试", {
+                            icon: 6
+                        }, function () {
+                            location.reload();
+                        });
+                    }
+                );
 
+                //监听返回值
                 return false;
 
-            });
+            }
+        );
 
     });</script>
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>授权</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/theme5.css"> -->
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+
+        <!-- 表单  -->
+        <form class="layui-form" id="createForm">
+
+            <!-- 角色名 -->
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    <span class="x-red">*</span>角色名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" class="layui-input" th:value="${role.name}" disabled/>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="L_permissions" class="layui-form-label">权限</label>
+                <div class="layui-input-block" id="L_permissions">
+                    <table class="layui-table" th:if="${permissionMap != null}">
+                        <thead id="L_product">
+                        <th>类别</th>
+                        <th>具体权限</th>
+                        </thead>
+                        <tbody>
+                        <tr th:each="element : ${permissionMap}">
+                            <td th:text="${element.key}">类别</td>
+                            <td>
+                                <input type="checkbox" name="permissionNums" lay-skin="primary"
+                                       th:each="permission : ${element.value}"
+                                       th:checked="${role.hasPermission(permission)}"
+                                       th:value="${permission.permissionNum}" th:title="${permission.name}"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p th:if="${permissionMap == null}"
+                       style="text-align: center; padding-top: 10px; padding-bottom: 10px; font-size: 20px; color: red;">
+                        权限都被删除了</p>
+                </div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="layui-form-item">
+                <label for="L_permissions" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    授权
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+
+<!-- 数据验证和提交 -->
+<script th:inline="javascript">
+
+    layui.use(['form', 'layer'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            <!-- 监听提交 -->
+            form.on(
+                'submit(add)',
+                function (data) {
+
+                    <!-- 异步提交 -->
+                    $.post("/permission/authrize/" + [[${role.id}]], $("#createForm").serialize(), function (resultInfo) {
+                        switch (resultInfo.status) {
+                            case 200:
+                                layer.alert(resultInfo.data, function () {
+                                    xadmin.close();
+                                    xadmin.father_reload();
+                                });
+                                break;
+                            case 400:
+                                layer.alert(resultInfo.data, function () {
+                                    xadmin.close();
+                                    xadmin.father_reload();
+                                });
+                                break;
+                            default:
+                                alert("请传入正确参数");
+                        }
+                    }, "json").error(
+                        function (xhr, status, info) {
+                            layer.alert("请求失败，请传入正确值并重新尝试", {
+                                icon: 6
+                            }, function () {
+                                location.reload();
+                            });
+                        }
+                    );
+
+                    return false;
+
+                });
+        });
+</script>
+
+</html>

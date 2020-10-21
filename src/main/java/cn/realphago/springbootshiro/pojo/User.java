@@ -2,6 +2,7 @@ package cn.realphago.springbootshiro.pojo;
 
 import cn.realphago.springbootshiro.uitl.DateFormatUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,7 @@ import java.util.UUID;
  * @author gaoyizhong
  * @create 2020/09/2020/9/6 13:54
  */
-public class User {
+public class User implements Serializable {
 
     private String id;
     private String userNum;
@@ -23,10 +24,10 @@ public class User {
     private Integer status;
     private String str_status;
     private List<Role> roleList;
-    private Date gmt_create;
-    private String str_gmt_create;
-    private Date gmt_modified;
-    private String str_gmt_modified;
+    private Date gmtCreate;
+    private String str_gmtCreate;
+    private Date gmtModified;
+    private String str_gmtModified;
 
     public User() {
     }
@@ -45,10 +46,10 @@ public class User {
                 ", status=" + status +
                 ", str_status='" + str_status + '\'' +
                 ", roleList=" + roleList +
-                ", gmt_create=" + gmt_create +
-                ", str_gmt_create='" + str_gmt_create + '\'' +
-                ", gmt_modified=" + gmt_modified +
-                ", str_gmt_modified='" + str_gmt_modified + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", str_gmtCreate='" + str_gmtCreate + '\'' +
+                ", gmtModified=" + gmtModified +
+                ", str_gmtModified='" + str_gmtModified + '\'' +
                 '}';
     }
 
@@ -82,20 +83,20 @@ public class User {
         this.status = status;
     }
 
-    public Date getGmt_create() {
-        return gmt_create;
+    public Date getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmt_modified() {
-        return gmt_modified;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmt_modified(Date gmt_modified) {
-        this.gmt_modified = gmt_modified;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public String getStr_status() {
@@ -105,16 +106,16 @@ public class User {
         return "未知";
     }
 
-    public String getStr_gmt_create() {
-        if (gmt_create != null) {
-            return DateFormatUtils.format(gmt_create);
+    public String getStr_gmtCreate() {
+        if (gmtCreate != null) {
+            return DateFormatUtils.format(gmtCreate);
         }
         return "未知";
     }
 
-    public String getStr_gmt_modified() {
-        if (gmt_modified != null) {
-            return DateFormatUtils.format(gmt_modified);
+    public String getStr_gmtModified() {
+        if (gmtModified != null) {
+            return DateFormatUtils.format(gmtModified);
         }
         return "未知";
     }

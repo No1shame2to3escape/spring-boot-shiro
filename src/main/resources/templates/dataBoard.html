@@ -65,46 +65,49 @@
                 <div class="layui-card-header">数据统计</div>
                 <div class="layui-card-body ">
                     <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+
+                        <!-- 用户数 -->
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:" class="x-admin-backlog-body">
                                 <h3>用户数</h3>
                                 <p>
-                                    <cite>66</cite></p>
+                                    <cite th:text="${resultInfo.data.userCount}"></cite></p>
                             </a>
                         </li>
+
+                        <!-- 角色数 -->
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:" class="x-admin-backlog-body">
                                 <h3>角色数</h3>
                                 <p>
-                                    <cite>12</cite></p>
+                                    <cite th:text="${resultInfo.data.userCount}">12</cite></p>
                             </a>
                         </li>
-                        <li class="layui-col-md2 layui-col-xs6">
-                            <a href="javascript:" class="x-admin-backlog-body">
-                                <h3>菜单数</h3>
-                                <p>
-                                    <cite>99</cite></p>
-                            </a>
-                        </li>
+
+                        <!-- 登录日志 -->
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:" class="x-admin-backlog-body">
                                 <h3>登录日志</h3>
                                 <p>
-                                    <cite>67</cite></p>
+                                    <cite th:text="${resultInfo.data.loginCount}">67</cite></p>
                             </a>
                         </li>
+
+                        <!-- 操作日志 -->
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:" class="x-admin-backlog-body">
                                 <h3>操作日志</h3>
                                 <p>
-                                    <cite>67</cite></p>
+                                    <cite th:text="${resultInfo.data.operationCount}">67</cite></p>
                             </a>
                         </li>
+
+                        <!-- 在线人数 -->
                         <li class="layui-col-md2 layui-col-xs6 ">
                             <a href="javascript:" class="x-admin-backlog-body">
                                 <h3>在线人数</h3>
                                 <p>
-                                    <cite>6766</cite></p>
+                                    <cite th:text="${resultInfo.data.onlineCount}">6766</cite></p>
                             </a>
                         </li>
                     </ul>
@@ -132,7 +135,8 @@
 </body>
 
 <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main1'));
 
@@ -150,19 +154,18 @@
         },
         xAxis: {
             type: 'category',
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            data: [[${resultInfo.data.weekDateStrings}]]
         },
         yAxis: {
             type: 'value'
         },
         series: [{
             name: '用户量',
-            data: [30, 40, 50, 0, 2, 13, 15],
+            data: [[${resultInfo.data.weekLoginCount}]],
             type: 'line',
             smooth: true
         }]
     };
-
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);

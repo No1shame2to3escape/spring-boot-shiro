@@ -5,6 +5,7 @@ import cn.realphago.springbootshiro.pojo.Role;
 import cn.realphago.springbootshiro.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -17,10 +18,13 @@ public interface RoleMapper extends AbstractMapper<Role> {
 
     List<Role> findRoleLIstByUserNum(@Param("userNum") String userNum);
 
-    Integer authorize(@Param("user") User user, @Param("role") Role role);
+    Integer distribution(@Param("userNum") String userNum, @PathVariable("roleNum") String roleNum);
 
-    Integer deAuthorize(User user);
+    Integer reDistributionByUserNum(String userNum);
 
-    Integer deAuthorizeByRoleNum(String roleNum);
+    Integer reDistributonByRoleNum(String roleNum);
 
+    void reDistributionAll();
+
+    Role findElementByRoleNum(String roleNum);
 }

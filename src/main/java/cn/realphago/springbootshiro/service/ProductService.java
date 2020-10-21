@@ -2,8 +2,8 @@ package cn.realphago.springbootshiro.service;
 
 import cn.realphago.springbootshiro.pojo.PageBean;
 import cn.realphago.springbootshiro.pojo.Product;
-import cn.realphago.springbootshiro.pojo.ProductSpecification;
 import cn.realphago.springbootshiro.pojo.User;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 
 import java.util.List;
 
@@ -13,16 +13,24 @@ import java.util.List;
  */
 public interface ProductService extends PageBeanService<Product> {
 
-    boolean create(Product product);
+    //添加
+    boolean create(Product product) throws InvalidParameterException;
 
-    boolean create(Product product, List<ProductSpecification> productSpecificationList);
+    //删除
+    boolean delete(String id) throws InvalidParameterException;
 
-    boolean delete(Product product);
+    //删除（全部）
+    boolean deleteAll();
 
-    Product findByProductName(String productName);
+    //查询（name）
+    Product findProductByName(String name) throws InvalidParameterException;
 
-    boolean update(Product product);
+    //更新
+    boolean update(Product product) throws InvalidParameterException;
 
-    Product findProductById(String id);
+    //查询（id）
+    Product findProductById(String id) throws InvalidParameterException;
+
+    boolean updateStatus(String id, Integer status) throws InvalidParameterException;
 
 }

@@ -7,47 +7,47 @@
 <div class="left-nav" th:fragment="leftMenuBody">
     <div id="side-nav">
         <ul id="nav">
-            <li>
+            <li shiro:hasAnyPermissions="user:find:*,role:find:*,permission:find:*,log:find:*">
                 <a href="javascript:">
-                    <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe6b8;</i>
+                    <i class="iconfont left-nav-li" lay-tips="系统管理">&#xe6b8;</i>
                     <cite>系统管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-                    <li>
+                    <li shiro:hasAnyPermissions="user:find:*,role:distribution:*">
                         <a onclick="xadmin.add_tab('用户管理','/user/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>用户管理</cite></a>
                     </li>
-                    <li>
+                    <li shiro:hasAnyPermissions="role:find:*,permission:authorize:*">
                         <a onclick="xadmin.add_tab('角色管理','/role/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>角色管理</cite></a>
                     </li>
-                    <li>
+                    <li shiro:hasPermission="permission:find:*">
                         <a onclick="xadmin.add_tab('资源权限管理','/permission/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>资源权限管理</cite></a>
                     </li>
-                    <li>
+                    <li shiro:hasPermission="log:find:*">
                         <a onclick="xadmin.add_tab('日志管理','/log/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>日志管理</cite></a>
                     </li>
                 </ul>
             </li>
-            <li>
+            <li shiro:hasAnyPermissions="order:find:*,product:find:*">
                 <a href="javascript:">
                     <i class="iconfont left-nav-li" lay-tips="业务管理">&#xe723;</i>
                     <cite>业务管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
-                    <li>
+                    <li shiro:hasPermission="order:find:*">
                         <a onclick="xadmin.add_tab('订单管理','/order/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>订单管理</cite></a>
                     </li>
-                    <li>
+                    <li shiro:hasPermission="product:find:*">
                         <a onclick="xadmin.add_tab('产品管理','/product/elements/1/5')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>产品管理</cite></a>

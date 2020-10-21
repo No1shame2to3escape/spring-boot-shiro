@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.OrderProductMapper">
+
+    <!-- 查询（id） -->
+    <select id="findElementById" resultType="orderProduct">
+        select *
+        from tab_order_product
+        where id = #{id}
+    </select>
+
+    <!-- 添加   -->
+    <insert id="create" parameterType="orderProduct">
+        insert into tab_order_product(order_num, product_num, count, name, price)
+        values(#{orderNum}, #{productNum}, #{count}, #{name}, #{price})
+    </insert>
+
+    <!-- 删除   -->
+    <delete id="deleteByOrderNum">
+        delete from tab_order_product
+        where order_num = #{orderNum}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from tab_order_product
+    </delete>
+
+    <!--  修改  -->
+
+
+    <!-- resultMap   -->
+
+
+    <!--  二次查询  -->
+
+
+</mapper>

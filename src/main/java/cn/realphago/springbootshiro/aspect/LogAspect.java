@@ -2,8 +2,12 @@ package cn.realphago.springbootshiro.aspect;
 
 import cn.realphago.springbootshiro.controller.IndexController;
 import cn.realphago.springbootshiro.controller.LogController;
+import cn.realphago.springbootshiro.pojo.LoginLog;
 import cn.realphago.springbootshiro.pojo.SysLog;
 import cn.realphago.springbootshiro.service.LogService;
+import cn.realphago.springbootshiro.service.LoginLogService;
+import cn.realphago.springbootshiro.uitl.DateFormatUtils;
+import cn.realphago.springbootshiro.uitl.GlobalInfoUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -36,6 +40,8 @@ public class LogAspect {
     private HttpServletRequest request;
     @Autowired
     private LogService logService;
+    @Autowired
+    private LoginLogService loginLogService;
 
     private Date startTime;//访问时间
     private Class executionClass;//访问的类
@@ -125,7 +131,12 @@ public class LogAspect {
 
                 sysLog.setMethod("[类名]" + executionClass.getName() + "[方法名]" + executionMethod.getName());
 
-                logService.create(sysLog);
+                if (!"/user/login".equals(sysLog.getUrl())) {
+                    logService.create(sysLog);
+                }
+                if (!"/user/logout".equals(sysLog.getUrl()) && !"/user/login".equals(sysLog.getUrl())) {
+                    GlobalInfoUtils.updateOperationMap(request.getSession(), new Date());
+                }
 
 
             }

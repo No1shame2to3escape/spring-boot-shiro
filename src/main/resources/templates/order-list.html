@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
     <meta charset="UTF-8">
@@ -24,212 +25,35 @@
 <body>
 
 <!-- 导航栏 -->
-<div class="x-nav">
-
-    <!-- 导航元素 -->
-    <span class="layui-breadcrumb">
-                        <a href="">首页</a>
-                        <a href="">演示</a>
-                        <a>
-                          <cite>导航元素</cite>
-                        </a>
-                      </span>
-
-    <!-- 刷新 -->
-    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
-       onclick="location.reload()" title="刷新">
-        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
-    </a>
-
-</div>
+<div th:insert="~{info :: myNav}"/>
 
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
+
             <div class="layui-card">
 
-                <!-- 条件筛选 -->
-                <div class="layui-card-body ">
-                    <div class="layui-collapse" lay-filter="test">
-                        <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">条件筛选<i class="layui-icon layui-colla-icon"></i></h2>
-                            <div class="layui-colla-content">
-                                <form class="layui-form" action="">
-                                    <div class="layui-form-item">
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label">范围</label>
-                                            <div class="layui-input-inline" style="width: 100px;">
-                                                <input type="text" name="price_min" placeholder="￥" autocomplete="off"
-                                                       class="layui-input">
-                                            </div>
-                                            <div class="layui-form-mid">-</div>
-                                            <div class="layui-input-inline" style="width: 100px;">
-                                                <input type="text" name="price_max" placeholder="￥" autocomplete="off"
-                                                       class="layui-input">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label">分组选择框</label>
-                                            <div class="layui-input-inline">
-                                                <select name="quiz">
-                                                    <option value="">请选择问题</option>
-                                                    <optgroup label="城市记忆">
-                                                        <option value="你工作的第一个城市">你工作的第一个城市</option>
-                                                    </optgroup>
-                                                    <optgroup label="学生时代">
-                                                        <option value="你的工号">你的工号</option>
-                                                        <option value="你最喜欢的老师">你最喜欢的老师</option>
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label">搜索选择框</label>
-                                            <div class="layui-input-inline">
-                                                <select name="modules" lay-verify="required" lay-search="">
-                                                    <option value="">直接选择或搜索选择</option>
-                                                    <option value="1">layer</option>
-                                                    <option value="2">form</option>
-                                                    <option value="3">layim</option>
-                                                    <option value="4">element</option>
-                                                    <option value="5">laytpl</option>
-                                                    <option value="6">upload</option>
-                                                    <option value="7">laydate</option>
-                                                    <option value="8">laypage</option>
-                                                    <option value="9">flow</option>
-                                                    <option value="10">util</option>
-                                                    <option value="11">code</option>
-                                                    <option value="12">tree</option>
-                                                    <option value="13">layedit</option>
-                                                    <option value="14">nav</option>
-                                                    <option value="15">tab</option>
-                                                    <option value="16">table</option>
-                                                    <option value="17">select</option>
-                                                    <option value="18">checkbox</option>
-                                                    <option value="19">switch</option>
-                                                    <option value="20">radio</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">联动选择框</label>
-                                        <div class="layui-input-inline">
-                                            <select name="quiz1">
-                                                <option value="">请选择省</option>
-                                                <option value="浙江" selected="">浙江省</option>
-                                                <option value="你的工号">江西省</option>
-                                                <option value="你最喜欢的老师">福建省</option>
-                                            </select>
-                                        </div>
-                                        <div class="layui-input-inline">
-                                            <select name="quiz2">
-                                                <option value="">请选择市</option>
-                                                <option value="杭州">杭州</option>
-                                                <option value="宁波" disabled="">宁波</option>
-                                                <option value="温州">温州</option>
-                                                <option value="温州">台州</option>
-                                                <option value="温州">绍兴</option>
-                                            </select>
-                                        </div>
-                                        <div class="layui-input-inline">
-                                            <select name="quiz3">
-                                                <option value="">请选择县/区</option>
-                                                <option value="西湖区">西湖区</option>
-                                                <option value="余杭区">余杭区</option>
-                                                <option value="拱墅区">临安市</option>
-                                            </select>
-                                        </div>
-                                        <div class="layui-form-mid layui-word-aux">此处只是演示联动排版，并未做联动交互</div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">复选框</label>
-                                        <div class="layui-input-block">
-                                            <input type="checkbox" name="like[write]" title="写作">
-                                            <input type="checkbox" name="like[read]" title="阅读" checked="">
-                                            <input type="checkbox" name="like[game]" title="游戏">
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item" pane="">
-                                        <label class="layui-form-label">原始复选框</label>
-                                        <div class="layui-input-block">
-                                            <input type="checkbox" name="like1[write]" lay-skin="primary" title="写作"
-                                                   checked="">
-                                            <input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">
-                                            <input type="checkbox" name="like1[game]" lay-skin="primary" title="游戏"
-                                                   disabled="">
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">开关-默认关</label>
-                                        <div class="layui-input-block">
-                                            <input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">开关-默认开</label>
-                                        <div class="layui-input-block">
-                                            <input type="checkbox" checked="" name="open" lay-skin="switch"
-                                                   lay-filter="switchTest" lay-text="ON|OFF">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">单选框</label>
-                                        <div class="layui-input-block">
-                                            <input type="radio" name="sex" value="男" title="男" checked="">
-                                            <input type="radio" name="sex" value="女" title="女">
-                                            <input type="radio" name="sex" value="禁" title="禁用" disabled="">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <div class="layui-input-block">
-                                            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-                                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 功能性按钮 -->
-                <div class="layui-card-header">
-
-                    <button class="layui-btn layui-btn-danger" onclick="delAll()">
-                        <i class="layui-icon"></i>批量删除
-                    </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./order-add.html',800,600)">
+                <div class="layui-card-header" shiro:hasPermission="order:create:*">
+                    <button class="layui-btn" onclick="xadmin.open('添加订单','/order/create',600,400)">
                         <i class="layui-icon"></i>添加
                     </button>
                 </div>
 
-                <!-- 数据主体 -->
-                <div class="layui-card-body ">
+                <!-- 数据 -->
+                <div class="layui-card-body " th:if="${pageBean != null}">
                     <table class="layui-table layui-form">
 
                         <!-- 数据标题 -->
                         <thead>
                         <tr>
-                            <th>
-                                <input type="checkbox" id="idCheckAll" lay-skin="primary">
-                            </th>
                             <th>订单编号</th>
-                            <th>收货人</th>
+                            <th>收货人/电话</th>
+                            <th>商品</th>
                             <th>总金额</th>
-                            <th>应付金额</th>
                             <th>订单状态</th>
-                            <th>支付状态</th>
-                            <th>发货状态</th>
-                            <th>支付方式</th>
-                            <th>配送方式</th>
+                            <th>省/市/县</th>
+                            <th>详细地址</th>
                             <th>下单时间</th>
                             <th>操作</th>
                         </tr>
@@ -237,64 +61,31 @@
 
                         <!-- 数据 -->
                         <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="ids" lay-skin="primary"></td>
-                            <td>2017009171822298053</td>
-                            <td>老王:18925139194</td>
-                            <td>7829.10</td>
-                            <td>7854.10</td>
-                            <td>待确认</td>
-                            <td>未支付</td>
-                            <td>未发货</td>
-                            <td>其他方式</td>
-                            <td>申通物流</td>
-                            <td>2017-08-17 18:22</td>
-                            <td class="td-manage">
-                                <a title="查看" onclick="xadmin.open('编辑','order-view.html')" href="javascript:">
-                                    <i class="layui-icon">&#xe63c;</i></a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:">
-                                    <i class="layui-icon">&#xe640;</i></a>
+                        <tr th:each="element : ${pageBean.elements}">
+                            <td th:text="${element.orderNum}">订单编号</td>
+                            <td th:text="${element.recipient}+ '/' +${element.phone}">
+                                收货人/电话
                             </td>
-                        </tr>
-                        <tr>
                             <td>
-                                <input type="checkbox" name="ids" lay-skin="primary"></td>
-                            <td>2017009171822298053</td>
-                            <td>老王:18925139194</td>
-                            <td>7829.10</td>
-                            <td>7854.10</td>
-                            <td>待确认</td>
-                            <td>未支付</td>
-                            <td>未发货</td>
-                            <td>其他方式</td>
-                            <td>申通物流</td>
-                            <td>2017-08-17 18:22</td>
-                            <td class="td-manage">
-                                <a title="查看" onclick="xadmin.open('编辑','order-view.html')" href="javascript:">
-                                    <i class="layui-icon">&#xe63c;</i></a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:">
-                                    <i class="layui-icon">&#xe640;</i></a>
+                                <p th:each="product : ${element.orderProductList}">
+                                    [[${product.name} + ' ' + ${product.price} + ' X ' + ${product.count}]]
+                                </p>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="ids" lay-skin="primary"></td>
-                            <td>2017009171822298053</td>
-                            <td>老王:18925139194</td>
-                            <td>7829.10</td>
-                            <td>7854.10</td>
-                            <td>待确认</td>
-                            <td>未支付</td>
-                            <td>未发货</td>
-                            <td>其他方式</td>
-                            <td>申通物流</td>
-                            <td>2017-08-17 18:22</td>
+                            <td th:text="${element.totalPrice}">总金额</td>
+                            <td th:text="${element.str_status}">订单状态</td>
+                            <td th:text="${element.province.name}+ '/' +${element.city.name}+ '/' +${element.county.name}">
+                                省/市/县
+                            </td>
+                            <td th:text="${element.address}">详细地址</td>
+                            <td th:text="${element.str_gmtCreate}">
+                                下单时间
+                            </td>
                             <td class="td-manage">
-                                <a title="查看" onclick="xadmin.open('编辑','order-view.html')" href="javascript:">
-                                    <i class="layui-icon">&#xe63c;</i></a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:">
-                                    <i class="layui-icon">&#xe640;</i></a>
+                                <a title="详情"
+                                   th:onclick="xadmin.open('详情','/order/completeOrderInfo/'+[[${element.id}]], 600, 400)"
+                                   href="javascript:">详情</a>
+                                <a shiro:hasPermission="order:delete:*" title="删除"
+                                   th:onclick="order_del(this,[[${element.id}]])" href="javascript:">删除</a>
                             </td>
                         </tr>
                         </tbody>
@@ -303,7 +94,7 @@
                 </div>
 
                 <!-- 分页数据 -->
-                <div id="layui-table-page1">
+                <div id="layui-table-page1" th:if="${pageBean != null}">
                     <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
 
                         <!-- 点击跳页 -->
@@ -318,8 +109,8 @@
 
                         <!--          首页          -->
                         <span class="layui-laypage-curr" th:onclick="clickChangeCurrentPage(1)">
-                                    1
-                                </span>
+                                            1
+                                        </span>
 
                         <span class="layui-laypage-spr">…</span>
 
@@ -328,27 +119,27 @@
                               th:each="i : ${#numbers.sequence(pageBean.currentPage - 4,pageBean.currentPage - 1)}"
                               th:onclick="clickChangeCurrentPage([[${i}]])" th:if="${pageBean.currentPage > 4}"
                               th:text="${i}">
-                                </span>
+                                        </span>
                         <span class="layui-laypage-curr" th:each="i : ${#numbers.sequence(1,pageBean.currentPage-1)}"
                               th:onclick="clickChangeCurrentPage([[${i}]])"
                               th:if="${pageBean.currentPage <= 4 && pageBean.currentPage > 1}" th:text="${i}">
-                                </span>
+                                        </span>
                         <span class="layui-laypage-curr">
-                                    <em class="layui-laypage-em"></em>
-                                    <em th:text="${pageBean.currentPage}">1</em>
-                                </span>
+                                            <em class="layui-laypage-em"></em>
+                                            <em th:text="${pageBean.currentPage}">1</em>
+                                        </span>
                         <span class="layui-laypage-curr"
                               th:each="i : ${#numbers.sequence(pageBean.currentPage+1,pageBean.currentPage + 3)}"
                               th:onclick="clickChangeCurrentPage([[${i}]])"
                               th:if="${pageBean.totalPage > pageBean.currentPage && pageBean.totalPage - 3 > pageBean.currentPage}"
                               th:text="${i}">
-                                </span>
+                                        </span>
                         <span class="layui-laypage-curr"
                               th:each="i : ${#numbers.sequence(pageBean.currentPage+1,pageBean.totalPage)}"
                               th:onclick="clickChangeCurrentPage([[${i}]])"
                               th:if="${pageBean.totalPage > pageBean.currentPage && pageBean.totalPage - 3 <= pageBean.currentPage}"
                               th:text="${i}">
-                                </span>
+                                        </span>
 
                         <span class="layui-laypage-spr">…</span>
 
@@ -369,11 +160,11 @@
 
                         <!-- 直接跳转 -->
                         <span class="layui-laypage-skip">到第
-                                    <input class="layui-input" type="text" id="currentPage" min="1"
-                                           th:value="${pageBean.currentPage}">页
-                                    <button class="layui-laypage-btn" type="button"
-                                            onclick="changeCurrentPage(this)">确定</button>
-                                </span>
+                                            <input class="layui-input" type="text" id="currentPage" min="1"
+                                                   th:value="${pageBean.currentPage}">页
+                                            <button class="layui-laypage-btn" type="button"
+                                                    onclick="changeCurrentPage(this)">确定</button>
+                                        </span>
                         <!-- 直接跳转 -->
 
                         <!--     totalCount      -->
@@ -383,26 +174,30 @@
 
                         <!--     pageSize     -->
                         <span class="layui-laypage-limits">
-                                    <select lay-ignore="" name="pageSize" onchange="changePageSize(this)">
-                                        <option disabled="disabled" th:text="${pageBean.pageSize} + ' 条/页'"
-                                                selected="selected"></option>
-                                        <option value="10">10 条/页</option>
-                                        <option value="20">20 条/页</option>
-                                        <option value="30">30 条/页</option>
-                                        <option value="40">40 条/页</option>
-                                        <option value="50">50 条/页</option>
-                                        <option value="60">60 条/页</option>
-                                        <option value="70">70 条/页</option>
-                                        <option value="80">80 条/页</option>
-                                        <option value="90">90 条/页</option>
-                                    </select>
-                                </span>
+                                            <select lay-ignore="" name="pageSize" onchange="changePageSize(this)">
+                                                <option disabled="disabled" th:text="${pageBean.pageSize} + ' 条/页'"
+                                                        selected="selected"></option>
+                                                <option value="5">5 条/页</option>
+                                                <option value="15">15 条/页</option>
+                                                <option value="50">50 条/页</option>
+                                                <option value="100">100 条/页</option>
+                                                <option value="300">300 条/页</option>
+                                                <option value="500">500 条/页</option>
+                                                <option value="500">-全部-</option>
+                                            </select>
+                                        </span>
                         <!--     pageSize     -->
 
                     </div>
                 </div>
 
+                <p th:if="${pageBean == null}"
+                   style="text-align: center; padding-top: 10px; padding-bottom: 10px; font-size: 20px; color: red;">
+                    对不起,数据为空请添加数据
+                </p>
+
             </div>
+
         </div>
     </div>
 </div>
@@ -428,14 +223,25 @@
     });
 
     <!-- 删除js -->
-    function member_del(obj, id) {
+    function order_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
             //发异步删除数据
-            $.post("/permission/delete", {id: id}, function (data) {
-
-            }, "json");
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
+            $.post("/order/delete", {id: id}, function (resultInfo) {
+                layer.alert(resultInfo.data, {
+                    icon: 6
+                }, function () {
+                    location.reload();
+                });
+            }, "json")
+                .error(
+                    function (xhr, status, info) {
+                        layer.alert("请求失败，请传入正确值并重新尝试", {
+                            icon: 6
+                        }, function () {
+                            location.reload();
+                        });
+                    }
+                );
         });
     }
 
@@ -456,35 +262,105 @@
         }
     }
 
+    <!-- 状态改变js -->
+    function changeStatus(id, status) {
+        switch (status) {
+            case 0:
+                $.post("/user/status/" + id + "/" + 1, {},
+                    function (resultInf) {
+
+                        layer.alert(resultInf.msg, {
+                            icon: 6
+                        }, function () {
+                            location.reload();
+                        });
+
+                    }, "json")
+                    .error(
+                        function (xhr, status, info) {
+                            layer.alert("请求失败，请传入正确值并重新尝试", {
+                                icon: 6
+                            }, function () {
+                                location.reload();
+                            });
+                        }
+                    );
+                break;
+            case 1:
+                $.post("/user/status/" + id + "/" + 0, {},
+                    function (resultInf) {
+
+                        layer.alert(resultInf.msg, {
+                            icon: 6
+                        }, function () {
+                            location.reload();
+                        });
+
+                    })
+                    .error(
+                        function (xhr, status, info) {
+                            layer.alert("请求失败，请传入正确值并重新尝试", {
+                                icon: 6
+                            }, function () {
+                                location.reload();
+                            });
+                        }
+                    );
+                break;
+            default:
+                layer.alert("请传入正确的状态值", {
+                    icon: 6
+                }, function () {
+                    location.reload();
+                });
+                break;
+        }
+    }
+
 </script>
 
 <!-- 分页js -->
 <script>
+
+    //获取主机域名
+    var host = window.location.host;
+    //获取请求协议
+    var protocol = window.location.protocol;
+    //拼接请求基础地址
+    var BASE_URL = protocol + "//" + host + "/order/elements/";
+
+
+    //修改记录数
     function changePageSize(obj) {
         var val = $(obj).val();
-        location.href = "http://localhost:9090/permission/elements/1/" + val;
+        location.href = BASE_URL + "1/" + val;
     }
 
+    //修改当前页码
     function changeCurrentPage() {
         var currentPage = $("#currentPage").val();
         var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
-        location.href = "http://localhost:9090/permission/elements/" + currentPage + "/" + pageSize;
+        location.href = BASE_URL + currentPage + "/" + pageSize;
     }
 
+    //上一页
     function preChangeCurrentPage(currentPage) {
         var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
-        location.href = "http://localhost:9090/permission/elements/" + (currentPage - 1) + "/" + pageSize;
+        location.href = BASE_URL + (currentPage - 1) + "/" + pageSize;
     }
 
+    //下一页
     function lastChangeCurrentPage(currentPage) {
         var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
-        location.href = "http://localhost:9090/permission/elements/" + (currentPage + 1) + "/" + pageSize;
+        location.href = BASE_URL + (currentPage + 1) + "/" + pageSize;
     }
 
+    //指定页码
     function clickChangeCurrentPage(currentPage) {
         var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
-        location.href = "http://localhost:9090/permission/elements/" + currentPage + "/" + pageSize;
+        location.href = BASE_URL + currentPage + "/" + pageSize;
     }
+
 </script>
 
 </html>

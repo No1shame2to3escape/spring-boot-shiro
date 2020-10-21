@@ -2,6 +2,7 @@ package cn.realphago.springbootshiro.pojo;
 
 import cn.realphago.springbootshiro.uitl.DateFormatUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -10,17 +11,17 @@ import java.util.UUID;
  * @author gaoyizhong
  * @create 2020/08/2020/8/7 8:34
  */
-public class Role {
+public class Role implements Serializable {
 
     private String id;//角色ID
     private String roleNum;//角色编号
     private String name;//角色名称
     private String roleDesc;//角色描述
     private List<Permission> permissionList;
-    private Date gmt_create;
-    private String str_gmt_create;
-    private Date gmt_modified;
-    private String str_gmt_modified;
+    private Date gmtCreate;
+    private String str_gmtCreate;
+    private Date gmtModified;
+    private String str_gmtModified;
 
     public Role() {
     }
@@ -47,10 +48,10 @@ public class Role {
                 ", name='" + name + '\'' +
                 ", roleDesc='" + roleDesc + '\'' +
                 ", permissionList=" + permissionList +
-                ", gmt_create=" + gmt_create +
-                ", str_gmt_create='" + str_gmt_create + '\'' +
-                ", gmt_modified=" + gmt_modified +
-                ", str_gmt_modified='" + str_gmt_modified + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", str_gmtCreate='" + str_gmtCreate + '\'' +
+                ", gmtModified=" + gmtModified +
+                ", str_gmtModified='" + str_gmtModified + '\'' +
                 '}';
     }
 
@@ -62,16 +63,26 @@ public class Role {
         return false;
     }
 
-    public String getStr_gmt_create() {
-        if (gmt_create != null) {
-            return DateFormatUtils.format(gmt_create);
+    public boolean hasPermission(Permission permission) {
+        boolean flag = false;
+        for (Permission permission1 : permissionList) {
+            if (permission1.equals(permission)) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    public String getStr_gmtCreate() {
+        if (gmtCreate != null) {
+            return DateFormatUtils.format(gmtCreate);
         }
         return "未知";
     }
 
-    public String getStr_gmt_modified() {
-        if (gmt_modified != null) {
-            return DateFormatUtils.format(gmt_modified);
+    public String getStr_gmtModified() {
+        if (gmtModified != null) {
+            return DateFormatUtils.format(gmtModified);
         }
         return "未知";
     }
@@ -92,20 +103,20 @@ public class Role {
         this.roleNum = roleNum;
     }
 
-    public Date getGmt_create() {
-        return gmt_create;
+    public Date getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmt_modified() {
-        return gmt_modified;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmt_modified(Date gmt_modified) {
-        this.gmt_modified = gmt_modified;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public String getId() {

@@ -2,6 +2,7 @@ package cn.realphago.springbootshiro.pojo;
 
 import cn.realphago.springbootshiro.uitl.DateFormatUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,16 +10,16 @@ import java.util.UUID;
  * @author gaoyizhong
  * @create 2020/09/2020/9/8 11:46
  */
-public class Permission {
+public class Permission implements Serializable {
 
     private String id;
     private String permissionNum;
     private String name;
     private String url;
-    private Date gmt_create;
-    private String str_gmt_create;
-    private Date gmt_modified;
-    private String str_gmt_modified;
+    private Date gmtCreate;
+    private String str_gmtCreate;
+    private Date gmtModified;
+    private String str_gmtModified;
 
     public Permission() {
     }
@@ -44,23 +45,31 @@ public class Permission {
                 ", permissionNum='" + permissionNum + '\'' +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
-                ", gmt_create=" + gmt_create +
-                ", str_gmt_create='" + str_gmt_create + '\'' +
-                ", gmt_modified=" + gmt_modified +
-                ", str_gmt_modified='" + str_gmt_modified + '\'' +
+                ", gmt_create=" + gmtCreate +
+                ", str_gmt_create='" + str_gmtCreate + '\'' +
+                ", gmt_modified=" + gmtModified +
+                ", str_gmt_modified='" + str_gmtModified + '\'' +
                 '}';
     }
 
-    public String getStr_gmt_create() {
-        if (gmt_create != null) {
-            return DateFormatUtils.format(gmt_create);
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Permission) {
+            return this.id.equals(((Permission) obj).getId());
+        }
+        return false;
+    }
+
+    public String getStr_gmtCreate() {
+        if (gmtCreate != null) {
+            return DateFormatUtils.format(gmtCreate);
         }
         return "未知";
     }
 
-    public String getStr_gmt_modified() {
-        if (gmt_modified != null) {
-            return DateFormatUtils.format(gmt_modified);
+    public String getStr_gmtModified() {
+        if (gmtModified != null) {
+            return DateFormatUtils.format(gmtModified);
         }
         return "未知";
     }
@@ -105,19 +114,19 @@ public class Permission {
         this.url = url;
     }
 
-    public Date getGmt_create() {
-        return gmt_create;
+    public Date getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmt_modified() {
-        return gmt_modified;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setGmt_modified(Date gmt_modified) {
-        this.gmt_modified = gmt_modified;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }

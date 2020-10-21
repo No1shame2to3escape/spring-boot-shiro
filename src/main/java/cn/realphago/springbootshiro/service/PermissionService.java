@@ -2,6 +2,7 @@ package cn.realphago.springbootshiro.service;
 
 import cn.realphago.springbootshiro.pojo.Permission;
 import cn.realphago.springbootshiro.pojo.Role;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 
 import java.util.List;
 
@@ -11,22 +12,26 @@ import java.util.List;
  */
 public interface PermissionService extends PageBeanService<Permission> {
 
-    boolean create(Permission permission);
+    boolean create(Permission permission) throws InvalidParameterException;
 
-    boolean delete(Permission permission);
+    boolean delete(String id) throws InvalidParameterException;
 
-    boolean update(Permission permission);
+    boolean update(Permission permission) throws InvalidParameterException;
 
-    Permission findPermissionById(String id);
+    Permission findPermissionById(String id) throws InvalidParameterException;
 
-    boolean authorize(Role role, Permission permission);
+    boolean authorize(String roleNum, String permissionNum) throws InvalidParameterException;
 
-    Permission findPermissionByName(String name);
+    Permission findPermissionByName(String name) throws InvalidParameterException;
 
-    boolean deAuthorizeByRoleNum(String roleNum);
+    boolean deAuthorizeByRoleNum(String roleNum) throws InvalidParameterException;
 
-    boolean deAuthorizeByPermissionNum(String permissionNum);
+    boolean deAuthorizeByPermissionNum(String permissionNum) throws InvalidParameterException;
 
-    List<Permission> findAll(String name);
+    boolean deleteAll();
+
+    List<Permission> findElementLikeUrl(String url) throws InvalidParameterException;
+
+    boolean authorizePermissions(String roleNum, String[] permissionNums) throws InvalidParameterException;
 
 }

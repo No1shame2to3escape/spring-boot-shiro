@@ -9,63 +9,88 @@
         select * from tab_user
         where username = #{username}
     </select>
-    <select id="findList" parameterType="pageBean" resultMap="user_roles">
+
+    <!-- 查询（分页） -->
+    <select id="findList" resultMap="user_roles">
         select *
-        from tab_user limit #{pageStart},#{pageSize}
+        from tab_user limit #{pageBean.pageStart},#{pageBean.pageSize}
     </select>
+
+    <!-- 查询（记录） -->
     <select id="findTotalCount" resultType="int">
         select count(*)
         from tab_user
     </select>
 
+    <select id="findElementByUserNum" resultMap="user_roles">
+        select *
+        from tab_user
+        where user_num = #{userNum}
+    </select>
+
+    <!-- 查询（id） -->
+    <select id="findElementById" resultMap="user_roles">
+        select *
+        from tab_user
+        where id = #{id}
+    </select>
+
     <!-- 添加   -->
     <insert id="create" parameterType="user">
-        insert into tab_user(id, userNum, username, password, gender, name, salt, status)
-        values(#{id}, #{userNum}, #{username}, #{password}, #{gender}, #{name}, #{salt}, #{status})
+        insert into tab_user(id, user_num, username, password, gender, name, salt)
+        values(#{id}, #{userNum}, #{username}, #{password}, #{gender}, #{name}, #{salt})
     </insert>
+
+    <!-- 授权 -->
     <insert id="authorize">
-        insert into tab_user_role(userNum,roleNum)
-        values(#{user.userNum},#{role.userNum})
+        insert into tab_user_role(user_num,role_num)
+        values(#{userNum},#{roleNum})
     </insert>
 
     <!-- 删除    -->
-    <delete id="delete" parameterType="user">
+    <delete id="delete">
         delete from tab_user
         where id = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from tab_user
     </delete>
 
     <!--  更新  -->
     <update id="update" parameterType="user">
         update tab_user
-        set name=#{name}, gender=#{gender}, salt=#{salt}, gmt_modified=#{gmt_modified}
+        set name = #{name}, gender = #{gender}, gmt_modified = CURRENT_TIMESTAMP
         where id = #{id}
     </update>
+
+    <!-- 更新（status） -->
     <update id="updateStatus">
         update tab_user
-        set status=#{status}
+        set status = #{status}
         where id = #{id}
     </update>
 
     <!-- resultMap   -->
     <resultMap id="user_roles" type="user">
-        <result column="userNum" property="userNum"/>
-        <collection column="userNum" property="roleList" ofType="role" select="findUserRoles"/>
+        <result column="user_num" property="userNum"/>
+        <collection column="user_num" property="roleList" ofType="role" select="findUserRoles"/>
     </resultMap>
     <resultMap id="role_permissionList" type="role">
-        <result column="roleNum" property="roleNum"/>
-        <collection property="permissionList" column="roleNum" ofType="permission" select="findRolePermissions"/>
+        <result column="role_num" property="roleNum"/>
+        <collection property="permissionList" column="role_num" ofType="permission" select="findRolePermissions"/>
     </resultMap>
 
     <!-- 二次查询   -->
     <select id="findUserRoles" resultMap="role_permissionList">
         select *
         from tab_role
-        where roleNum in (select roleNum from tab_user_role where userNum = #{userNum})
+        where role_num in (select role_num from tab_user_role where user_num = #{user_num})
     </select>
     <select id="findRolePermissions" resultType="permission">
         SELECT *
         FROM tab_permission
-        WHERE permissionNum IN (SELECT permissionNum FROM tab_role_permission WHERE roleNum = #{roleNum} )
+        WHERE permission_num IN (SELECT permission_num FROM tab_role_permission WHERE role_num = #{role_num} )
     </select>
 
 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/theme5.css"> -->
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<body>
+
+<div class="layui-fluid">
+
+    <div class="layui-row">
+        <form class="layui-form" id="createForm" th:if="${order != null}">
+
+            <div class="layui-form-item">
+                <label for="L_orderNum" class="layui-form-label">
+                    <span class="x-red">*</span>订单编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_orderNum" class="layui-input" name="recipient" th:value="${order.orderNum}"
+                           disabled/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_recipient" class="layui-form-label">
+                    <span class="x-red">*</span>收货人</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_recipient" class="layui-input" name="recipient"
+                           th:value="${order.recipient}" disabled/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_phone" class="layui-form-label">
+                    <span class="x-red">*</span>手机号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_phone" class="layui-input" name="phone" th:value="${order.phone}"
+                           disabled/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">省/市/县</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" th:value="${order.province.name}" disabled>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" th:value="${order.city.name}" disabled>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" th:value="${order.county.name}" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_address" class="layui-form-label">
+                    <span class="x-red">*</span>详细地址</label>
+                <div class="layui-input-block">
+                                <textarea placeholder="请输入内容" id="L_address"
+                                          name="address" class="layui-textarea" th:text="${order.address}"
+                                          disabled></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_logistics" class="layui-form-label">
+                    <span class="x-red">*</span>配送物流</label>
+                <div class="layui-input-inline">
+                    <input id="L_logistics" type="text" class="layui-input" disabled th:value="${order.str_logistics}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_payType" class="layui-form-label">
+                    <span class="x-red">*</span>支付方式</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_payType" class="layui-input" th:value="${order.str_payType}" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_status" class="layui-form-label">
+                    <span class="x-red">*</span>订单状态</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_status" class="layui-input" th:value="${order.str_status}" disabled>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="L_product" class="layui-form-label">商品增加</label>
+                <div class="layui-input-block">
+                    <table class="layui-table">
+                        <thead id="L_product">
+                        <th>商品</th>
+                        <th>价格</th>
+                        <th>操作</th>
+                        </thead>
+                        <tbody>
+                        <tr th:each="element : ${order.orderProductList}">
+                            <input type="hidden" name="productNum" th:value="${element.productNum}"/>
+                            <td th:text="${element.name}">商品名</td>
+                            <td th:text="${element.price}">价格</td>
+                            <td>
+                                <div class="layui-input-inline" style="width: 40px;">
+                                    <input class="layui-input" type="text" value="1"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           style="padding: 0px; text-align: center;" maxlength="3" minlength="1"
+                                           onblur="defaultProductCount(this)"
+                                           th:value="${element.count}" name="count" disabled/>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="L_comment" class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                                <textarea id="L_comment"
+                                          name="comment" class="layui-textarea" th:text="${order.comment}"></textarea>
+                </div>
+            </div>
+
+
+        </form>
+
+        <p th:if="${order == null}">没有该订单数据</p>
+    </div>
+
+</div>
+
+</body>
+
+
+<script>
+    layui.use(['form', 'layer'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+        })
+</script>
+
+</html>

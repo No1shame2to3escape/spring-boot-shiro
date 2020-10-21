@@ -3,12 +3,13 @@ package cn.realphago.springbootshiro.service;
 import cn.realphago.springbootshiro.mapper.ProductMapper;
 import cn.realphago.springbootshiro.pojo.PageBean;
 import cn.realphago.springbootshiro.pojo.Product;
-import cn.realphago.springbootshiro.pojo.ProductSpecification;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 import cn.realphago.springbootshiro.uitl.PageBeanUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,24 +33,82 @@ public class ProductServiceTest {
 
     @Test
     public void create() {
-        Product product = new Product("蛋黄酥");
-        List<ProductSpecification> productSpecificationList = new ArrayList<ProductSpecification>();
-        productSpecificationList.add(new ProductSpecification(product.getProductNum(), "2个装"));
-        productSpecificationList.add(new ProductSpecification(product.getProductNum(), "网红装"));
-        productSpecificationList.add(new ProductSpecification(product.getProductNum(), "空杯装"));
-        productService.create(product, productSpecificationList);
+        try {
+            productService.create(new Product("蛋黄派", "美味蛋糕", new BigDecimal("29.8")));
+            productService.create(new Product("苹果", "冬季霸屏王", new BigDecimal("9.9")));
+            productService.create(new Product("棒棒糖", "好甜啊", new BigDecimal("7.9")));
+            productService.create(new Product("巧克力", "真的这么丝滑", new BigDecimal("49.66")));
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void delete() {
-        productService.delete(productService.findByProductName("蛋黄酥"));
+        try {
+            productService.delete(productService.findProductByName("蛋黄派").getId());
+            productService.delete(productService.findProductByName("苹果").getId());
+            productService.delete(productService.findProductByName("棒棒糖").getId());
+            productService.delete(productService.findProductByName("巧克力").getId());
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Test
     public void findProductById() {
-        Product product = productService.findProductById("14019d56886649ce964c00268f03082b");
+        Product product = null;
+        try {
+            product = productService.findProductById(productService.findProductByName("蛋黄派").getId());
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
         System.out.println("product = " + product);
+    }
+
+    @Test
+    public void findByProductName() {
+        try {
+            System.out.println(productService.findProductByName("蛋黄派"));
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void update() {
+        Product product = null;
+        try {
+            product = productService.findProductByName("蛋黄派");
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
+        product.setPrice(new BigDecimal(9999.9));
+        try {
+            productService.update(product);
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updateStatus() {
+        try {
+            productService.updateStatus(productService.findProductByName("苹果").getId(), -1);
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void findElementById() {
+        try {
+            Product product = productService.findProductById(productService.findProductByName("苹果").getId());
+            System.out.println("product = " + product);
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
     }
 
 }

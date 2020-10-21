@@ -3,6 +3,7 @@ package cn.realphago.springbootshiro.mapper;
 import cn.realphago.springbootshiro.pojo.Permission;
 import cn.realphago.springbootshiro.pojo.Role;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 
@@ -13,12 +14,16 @@ import java.util.List;
 @Mapper
 public interface PermissionMapper extends AbstractMapper<Permission> {
 
-    Integer authorize(Role role, Permission permission);
+    Integer authorize(String roleNum, String permissionNum);
 
     Integer deAuthorizeByRoleNum(String roleNum);
 
     Integer deAuthorizeByPermissionNum(String permissionNum);
 
-    List<Permission> findAll(String name);
+    void deAuthorizeAll();
+
+    Permission findElementByPermissionNum(String permissionNum);
+
+    List<Permission> findElementLikeUrl(String url);
 
 }

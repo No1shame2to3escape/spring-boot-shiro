@@ -3,9 +3,11 @@ package cn.realphago.springbootshiro.service;
 import cn.realphago.springbootshiro.pojo.PageBean;
 import cn.realphago.springbootshiro.pojo.Role;
 import cn.realphago.springbootshiro.pojo.User;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gaoyizhong
@@ -13,24 +15,31 @@ import java.util.List;
  */
 public interface RoleService extends PageBeanService<Role> {
 
-    List<Role> findRoleLIstByUserNum(String userNum);
+    List<Role> findRoleLIstByUserNum(String userNum) throws InvalidParameterException;
 
-    boolean create(Role role);
+    boolean create(Role role) throws InvalidParameterException;
 
-    boolean authorize(User user, Role role);
+    boolean distribution(User user, Role role) throws InvalidParameterException;
 
     //删除
-    boolean delete(Role role);
+    boolean delete(String id) throws InvalidParameterException;
 
     //删除权限(rid)
-    boolean deAuthorizeByRoleNum(String roleNum);
+    boolean reDistributonByRoleNum(String roleNum) throws InvalidParameterException;
+
+    //删除（全部）
+    boolean deleteAll();
 
     //修改
-    boolean update(Role role);
+    boolean update(Role role) throws InvalidParameterException;
 
-    Role findElementById(String id);
+    Role findElementById(String id) throws InvalidParameterException;
 
-    Role findRoleByName(String roleName);
+    Role findRoleByName(String roleName) throws InvalidParameterException;
 
-    List<Role> findAll();
+    Role findRoleByRoleNum(String roleNum) throws InvalidParameterException;
+
+    List<Role> findAll(Map<String, Object> addtionParamMap);
+
+    boolean distributionRoles(String userNum, String[] roleNums) throws InvalidParameterException;
 }

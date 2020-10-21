@@ -94,24 +94,32 @@
         //监听提交
         form.on('submit(add)',
             function (data) {
-                $.post("/permission/create", $("#createForm").serialize(), function (resultInf) {
-                    if (resultInf.flag) {
-                        layer.alert(resultInf.msg, {
+                $.post("/permission/create", $("#createForm").serialize(), function (resultInfo) {
+                    switch (resultInfo.status) {
+                        case 200:
+                            layer.alert(resultInfo.data, function () {
+                                xadmin.close();
+                                xadmin.father_reload();
+                            });
+                            break;
+                        case 400:
+                            layer.alert(resultInfo.data, function () {
+                                xadmin.close();
+                                xadmin.father_reload();
+                            });
+                            break;
+                        default:
+                            alert("数据错误");
+                    }
+                }, "json").error(
+                    function (xhr, status, info) {
+                        layer.alert("请求失败，请传入正确值并重新尝试", {
                             icon: 6
                         }, function () {
-                            //关闭当前frame
-                            xadmin.close();
-
-                            // 可以对父窗口进行刷新
-                            xadmin.father_reload();
-                        });
-                    } else {
-                        layer.alert(resultInf.msg, {
-                            icon: 6
-                        }, function () {
+                            location.reload();
                         });
                     }
-                }, "json");
+                );
 
                 return false;
 

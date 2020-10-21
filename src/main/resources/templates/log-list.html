@@ -2,6 +2,7 @@
 <html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
     <title>日志列表</title>
     <meta name="renderer" content="webkit">
@@ -19,23 +20,13 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>
 
 <body>
 
 <!--  导航     -->
-<div class="x-nav">
-            <span class="layui-breadcrumb">
-                <a href="">首页</a>
-                <a href="">演示</a>
-                <a>
-                    <cite>导航元素</cite></a>
-            </span>
-    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
-       onclick="location.reload()" title="刷新">
-        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
-    </a>
-</div>
+<div th:insert="~{info :: myNav}"/>
 
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
@@ -43,7 +34,7 @@
             <div class="layui-card">
 
                 <!-- 条件筛选 -->
-                <div class="layui-card-body ">
+                <div class="layui-card-body " th:if="${pageBean != null}">
                     <div class="layui-collapse" lay-filter="test">
                         <div class="layui-colla-item">
 
@@ -123,7 +114,7 @@
                 </div>
 
                 <!-- 数据主体  -->
-                <div class="layui-card-body ">
+                <div class="layui-card-body " th:if="${pageBean != null}">
                     <table class="layui-table layui-form">
 
                         <!-- 标题 -->
@@ -154,7 +145,7 @@
                 </div>
 
                 <!-- 分页数据 -->
-                <div id="layui-table-page1">
+                <div id="layui-table-page1" th:if="${pageBean != null}">
                     <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
 
                         <!-- 点击跳页 -->
@@ -237,21 +228,24 @@
                                             <select lay-ignore="" name="pageSize" onchange="changePageSize(this)">
                                                 <option disabled="disabled" th:text="${pageBean.pageSize} + ' 条/页'"
                                                         selected="selected"></option>
-                                                <option value="10">10 条/页</option>
-                                                <option value="20">20 条/页</option>
-                                                <option value="30">30 条/页</option>
-                                                <option value="40">40 条/页</option>
+                                                <option value="5">5 条/页</option>
+                                                <option value="15">15 条/页</option>
                                                 <option value="50">50 条/页</option>
-                                                <option value="60">60 条/页</option>
-                                                <option value="70">70 条/页</option>
-                                                <option value="80">80 条/页</option>
-                                                <option value="90">90 条/页</option>
+                                                <option value="100">100 条/页</option>
+                                                <option value="300">300 条/页</option>
+                                                <option value="500">500 条/页</option>
+                                                <option value="500">-全部-</option>
                                             </select>
                                         </span>
                         <!--     pageSize     -->
 
                     </div>
                 </div>
+
+                <p th:if="${pageBean == null}"
+                   style="text-align: center; padding-top: 10px; padding-bottom: 10px; font-size: 20px; color: red;">
+                    对不起,数据为空请添加数据
+                </p>
 
             </div>
         </div>
@@ -260,6 +254,7 @@
 
 </body>
 
+<!-- 功能js -->
 <script>
 
     <!-- 删除js -->
@@ -267,57 +262,66 @@
         layer.confirm('确认要删除吗？', function (index) {
             //发异步删除数据
             $.post("/product/delete", {id: id}, function (data) {
-
-            }, "json");
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
+                layer.alert(resultInfo.data, {
+                    icon: 6
+                }, function () {
+                    location.reload();
+                });
+            }, "json")
+                .error(
+                    function (xhr, status, info) {
+                        layer.alert("请求失败，请传入正确值并重新尝试", {
+                            icon: 6
+                        }, function () {
+                            location.reload();
+                        });
+                    }
+                );
         });
     }
 
 </script>
 
 <!-- 分页js -->
-<script th:inline="javascript">
+<script>
 
-    <!-- 获取参数值 -->
-    var currentPage = [[${pageBean.currentPage}]];
-    var pageSize = [[${pageBean.pageSize}]];
-    var username = [[${pageBean.parameterMap['username']}]];
-    var startTime = [[${pageBean.parameterMap['startTime']}]];
-    var endTime = [[${pageBean.parameterMap['endTime']}]];
-    var ip = [[${pageBean.parameterMap['ip']}]];
-    var url = [[${pageBean.parameterMap['url']}]];
+    //获取主机域名
+    var host = window.location.host;
+    //获取请求协议
+    var protocol = window.location.protocol;
+    //拼接请求基础地址
+    var BASE_URL = protocol + "//" + host + "/log/elements/";
 
+
+    //修改记录数
     function changePageSize(obj) {
         var val = $(obj).val();
-        location.href = "http://localhost:9090/log/elements/1/" + val
-            + "?ip = " + ip + "&url=" + url + "&username=" + username + "&startTime=" + startTime
-            + "&endTime=" + endTime;
+        location.href = BASE_URL + "1/" + val;
     }
 
+    //修改当前页码
     function changeCurrentPage() {
         var currentPage = $("#currentPage").val();
-        location.href = "http://localhost:9090/log/elements/" + currentPage + "/" + pageSize
-            + "?ip = " + ip + "&url=" + url + "&username=" + username + "&startTime=" + startTime
-            + "&endTime=" + endTime;
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = BASE_URL + currentPage + "/" + pageSize;
     }
 
+    //上一页
     function preChangeCurrentPage(currentPage) {
-        location.href = "http://localhost:9090/log/elements/" + (currentPage - 1) + "/" + pageSize
-            + "?ip = " + ip + "&url=" + url + "&username=" + username + "&startTime=" + startTime
-            + "&endTime=" + endTime;
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = BASE_URL + (currentPage - 1) + "/" + pageSize;
     }
 
+    //下一页
     function lastChangeCurrentPage(currentPage) {
-        location.href = "http://localhost:9090/log/elements/" + (currentPage + 1) + "/" + pageSize
-            + "?ip = " + ip + "&url=" + url + "&username=" + username + "&startTime=" + startTime
-            + "&endTime=" + endTime;
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = BASE_URL + (currentPage + 1) + "/" + pageSize;
     }
 
+    //指定页码
     function clickChangeCurrentPage(currentPage) {
-        location.href = "http://localhost:9090/log/elements/" + currentPage + "/" + pageSize
-            + "?ip = " + ip + "&url=" + url + "&username=" + username + "&startTime=" + startTime
-            + "&endTime=" + endTime;
+        var pageSize = location.toString().substring(location.toString().lastIndexOf('/') + 1, location.toString().length);
+        location.href = BASE_URL + currentPage + "/" + pageSize;
     }
 
 </script>

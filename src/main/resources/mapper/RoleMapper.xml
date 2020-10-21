@@ -10,75 +10,98 @@
         from tab_role
         where id = #{id}
     </select>
-    <select id="findList" parameterType="pageBean" resultMap="role_permissionList">
+
+    <!-- 查询（分页） -->
+    <select id="findList" resultMap="role_permissionList">
         select *
-        from tab_role limit #{pageStart},#{pageSize}
+        from tab_role limit #{pageBean.pageStart},#{pageBean.pageSize}
     </select>
+
+    <!-- 查询（记录） -->
     <select id="findTotalCount" resultType="int">
         select count(*)
         from tab_role
     </select>
+
+    <!-- 查询（用户编号） -->
     <select id="findRoleLIstByUserNum" resultMap="role_permissionList">
         select *
         from tab_role
-        where roleNum in (select roleNum from tab_user_role where userNum = #{userNum})
+        where role_num in (select role_num from tab_user_role where user_num = #{userNum})
     </select>
+
+    <!-- 查询（角色编号） -->
+    <select id="findElementByRoleNum" resultMap="role_permissionList">
+        select *
+        from tab_role
+        where role_Num = #{roleNum}
+    </select>
+
+    <!-- 查询（名字） -->
     <select id="findElementByName" resultMap="role_permissionList">
         select *
         from tab_role
         where name = #{name}
     </select>
-    <!-- 查询   -->
 
     <!-- 新增   -->
     <insert id="create" parameterType="role">
-        insert into tab_role(id, roleNum, name, roleDesc)
+        insert into tab_role(id, role_num, name, role_desc)
         values(#{id}, #{roleNum}, #{name}, #{roleDesc})
     </insert>
+
     <!--  授权  -->
-    <insert id="authorize">
-        insert into tab_user_role(userNum,roleNum)
-        values(#{user.userNum},#{role.roleNum})
+    <insert id="distribution">
+        insert into tab_user_role(user_num,role_num)
+        values(#{userNum},#{roleNum})
     </insert>
-    <!--  授权  -->
-    <!-- 新增   -->
+
 
     <!-- 删除   -->
-    <delete id="delete" parameterType="role">
+    <delete id="delete">
         delete from tab_role
         where id = #{id}
     </delete>
-    <delete id="deAuthorize" parameterType="user">
+
+    <!-- 删除权限 -->
+    <delete id="reDistributionByUserNum">
         delete from tab_user_role
-        where userNum = #{userNum}
+        where user_num = #{userNum}
     </delete>
-    <delete id="deAuthorizeByRoleNum">
+
+    <!-- 删除权限（角色编号） -->
+    <delete id="reDistributonByRoleNum">
         delete from tab_user_role
-        where roleNum = #{roleNum}
+        where role_num = #{roleNum}
     </delete>
-    <!-- 删除   -->
+
+    <!-- 删除所有用户的角色 -->
+    <delete id="reDistributionAll">
+        delete from tab_user_role;
+    </delete>
+
+    <delete id="deleteAll">
+        delete from tab_role
+    </delete>
 
     <!--  修改  -->
     <update id="update" parameterType="role">
         update tab_role
-        set name = #{name}, roleDesc = #{roleDesc}, gmt_modified = #{gmt_modified}
-        where roleNum = #{roleNum}
+        set name = #{name}, role_desc = #{roleDesc}, gmt_modified = CURRENT_TIMESTAMP
+        where role_num = #{roleNum}
     </update>
-    <!--  修改  -->
 
     <!--  resultMap  -->
     <resultMap id="role_permissionList" type="role">
-        <result property="roleNum" column="roleNum"/>
-        <collection property="permissionList" column="roleNum" select="findRolePermissions" ofType="permission"/>
+        <result property="roleNum" column="role_num"/>
+        <collection property="permissionList" column="role_num" select="findRolePermissions" ofType="permission"/>
     </resultMap>
-    <!--  resultMap  -->
 
     <!-- 二次查找   -->
     <select id="findRolePermissions" resultType="permission">
         SELECT *
         FROM tab_permission
-        WHERE permissionNum IN (SELECT permissionNum FROM tab_role_permission WHERE roleNum = #{roleNum} )
+        WHERE permission_num IN (SELECT permission_num FROM tab_role_permission WHERE role_num = #{role_num} )
     </select>
-    <!-- 二次查找   -->
 
 </mapper>

@@ -3,6 +3,7 @@ package cn.realphago.springbootshiro.shiro;
 import cn.realphago.springbootshiro.pojo.Permission;
 import cn.realphago.springbootshiro.pojo.Role;
 import cn.realphago.springbootshiro.pojo.User;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 import cn.realphago.springbootshiro.service.RoleService;
 import cn.realphago.springbootshiro.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
@@ -31,7 +32,12 @@ public class CustomerRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        User user = userService.findUserByUsername((String) principalCollection.getPrimaryPrincipal());
+        User user = null;
+        try {
+            user = userService.findUserByUsername((String) principalCollection.getPrimaryPrincipal());
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
         if (user != null) {
             SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 //            List<Role> roles = roleService.findRoleLIstByUserNum(user.getUserNum());
@@ -48,8 +54,13 @@ public class CustomerRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        User user = userService.findUserByUsername((String) authenticationToken.getPrincipal());
-        if (user != null) {
+        User user = null;
+        try {
+            user = userService.findUserByUsername((String) authenticationToken.getPrincipal());
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
+        if (user != null && user.getStatus() != 0) {
             return new SimpleAuthenticationInfo(authenticationToken.getPrincipal(),
                     user.getPassword(),
                     ByteSource.Util.bytes(user.getSalt()),

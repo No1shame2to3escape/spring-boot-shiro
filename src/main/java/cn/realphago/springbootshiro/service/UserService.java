@@ -1,7 +1,7 @@
 package cn.realphago.springbootshiro.service;
 
-import cn.realphago.springbootshiro.pojo.PageBean;
 import cn.realphago.springbootshiro.pojo.User;
+import cn.realphago.springbootshiro.pojo.exception.InvalidParameterException;
 
 /**
  * @author gaoyizhong
@@ -9,19 +9,25 @@ import cn.realphago.springbootshiro.pojo.User;
  */
 public interface UserService extends PageBeanService<User> {
 
-    User findUserByUsername(String username);
+    //查询
+    User findUserByUsername(String username) throws InvalidParameterException;
 
-    boolean create(User user);
+    //添加
+    boolean create(User user) throws InvalidParameterException;
 
-    boolean create(User user, String[] roles);
+    //删除
+    boolean delete(String id) throws InvalidParameterException;
 
-    boolean delete(User user);
+    //删除（全部）
+    boolean deleteAll();
 
-    boolean update(User user);
-
-    boolean update(User user, String[] roles);
+    boolean update(User user) throws InvalidParameterException;
 
     //更新（id,status）
-    boolean updateStatus(String id, Integer status);
+    boolean updateStatus(String id, Integer status) throws InvalidParameterException;
+
+    User findUserById(String id) throws InvalidParameterException;
+
+    User findUserByUserNum(String userNum) throws InvalidParameterException;
 
 }

@@ -4,62 +4,73 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.realphago.springbootshiro.mapper.ProductMapper">
 
-    <!--  查询  -->
-    <select id="findList" parameterType="pageBean" resultMap="product_specification">
-        select *
-        from tab_product limit #{pageStart},#{pageSize}
-    </select>
-    <select id="findElementById" resultMap="product_specification">
+    <!--  分页查询  -->
+    <select id="findList" resultType="product">
         select *
         from tab_product
-        where id = #{id}
+        <where>
+            <if test="addtionParamMap != null">
+                <if test="addtionParamMap.status != null">
+                    status = #{addtionParamMap.status}
+                </if>
+            </if>
+        </where>
+        limit #{pageBean.pageStart},#{pageBean.pageSize}
     </select>
+
+    <!-- 查询（总记录） -->
     <select id="findTotalCount" resultType="int">
         select count(*)
         from tab_product
     </select>
-    <select id="findByProductName" resultMap="product_specification">
+
+    <!-- 查询（id） -->
+    <select id="findElementById" resultType="product">
         select *
         from tab_product
-        where productName = #{productName}
+        where id = #{id}
     </select>
-    <!--  查询  -->
+
+    <!-- 查询（name） -->
+    <select id="findElementByName" resultType="product">
+        select *
+        from tab_product
+        where name = #{name}
+    </select>
+
+    <select id="findElementByProductNum" resultType="product">
+        select *
+        from tab_product
+        where product_num = #{productNum}
+    </select>
 
     <!-- 添加   -->
     <insert id="create" parameterType="product">
-        insert into tab_product(id,productNum,name,productDesc,status)
-        values(#{id},#{productNum},#{name},#{productDesc},#{status})
+        insert into tab_product(id, product_num, name, product_desc, price, status)
+        values(#{id}, #{productNum}, #{name}, #{productDesc}, #{price}, 0)
     </insert>
-    <!-- 添加   -->
 
-    <!-- 删除   -->
-    <delete id="delete" parameterType="product">
+    <!-- 删除 (id)  -->
+    <delete id="delete">
         delete from tab_product
         where id = #{id}
     </delete>
-    <!-- 删除   -->
+
+    <delete id="deleteAll">
+        delete from tab_product
+    </delete>
 
     <!--  修改  -->
     <update id="update" parameterType="product">
         update tab_product
-        set productName = #{productName}, productDesc = #{productDesc}, status = #{status}, gmt_modified = #{gmt_modified}
+        set name = #{name}, product_desc = #{productDesc}, price = #{price}, gmt_modified = CURRENT_TIMESTAMP
         where id = #{id}
     </update>
-    <!--  修改  -->
 
-    <!-- resultMap   -->
-    <resultMap id="product_specification" type="product">
-        <result property="productNum" column="productNum"/>
-        <collection property="productSpecificationList" column="productNum" select="findProductSpecificationList"/>
-    </resultMap>
-    <!-- resultMap   -->
-
-    <!--  二次查询  -->
-    <select id="findProductSpecificationList" resultType="productSpecification">
-        select *
-        from tab_product_specification
-        where productNum = #{productNum}
-    </select>
-    <!--  二次查询  -->
+    <update id="updateStatus">
+        update tab_product
+        set status = #{status}, gmt_modified = CURRENT_TIMESTAMP
+        where id = #{id}
+    </update>
 
 </mapper>

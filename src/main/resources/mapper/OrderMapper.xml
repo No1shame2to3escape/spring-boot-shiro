@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.OrderMapper">
+
+    <!--  查询  -->
+    <select id="findList" resultMap="orderMap">
+        select *
+        from tab_order limit #{pageBean.pageStart},#{pageBean.pageSize}
+    </select>
+
+    <!-- 查询（id） -->
+    <select id="findElementById" resultMap="orderMap">
+        select *
+        from tab_order
+        where id = #{id}
+    </select>
+
+    <!-- 查询（记录） -->
+    <select id="findTotalCount" resultType="int">
+        select count(*)
+        from tab_order
+    </select>
+
+    <!-- 添加   -->
+    <insert id="create" parameterType="order">
+        insert into tab_order(id, order_num, comment, pay_type, province_id, city_id, county_id, address, recipient, phone, logistics, status, total_price)
+        values(#{id}, #{orderNum}, #{comment}, #{payType}, #{province.code}, #{city.code}, #{county.code}, #{address}, #{recipient}, #{phone}, #{logistics}, #{status}, #{totalPrice})
+    </insert>
+
+    <!-- 删除   -->
+    <delete id="delete">
+        delete from tab_order
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from tab_order
+    </delete>
+
+    <!--  修改  -->
+
+
+    <!-- resultMap   -->
+    <resultMap id="orderMap" type="order">
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="orderNum" column="order_num"/>
+        <association property="province" column="code = province_id" javaType="baseArea"
+                     select="easyFindBaseAreaByCode"/>
+        <association property="city" column="code = city_id" javaType="baseArea" select="easyFindBaseAreaByCode"/>
+        <association property="county" column="code = county_id" javaType="baseArea" select="easyFindBaseAreaByCode"/>
+        <collection property="orderProductList" column="order_num" javaType="list" ofType="orderProduct"
+                    select="findOrderProductListByOrderNum"/>
+    </resultMap>
+
+
+    <!--  二次查询  -->
+    <select id="findOrderProductListByOrderNum" resultType="orderProduct">
+        select *
+        from tab_order_product
+        where order_num = #{order_num}
+    </select>
+    <select id="easyFindBaseAreaByCode" resultType="baseArea">
+        select *
+        from tab_base_area
+        where code = #{code}
+    </select>
+
+
+</mapper>

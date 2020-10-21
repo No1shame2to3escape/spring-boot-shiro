@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<body>
+
+<div class="x-nav" th:fragment="myNav" style="height: auto">
+
+    <span style="color: red;">
+        用户名为admin/user/role/permission/product/order，密码就是用户名，角色与用户名一致
+        </br>
+        ，并且这些用户的资料权限不可修改，不可删除，要进行删除、修改测试请添加用户进行测试
+    </span>
+
+    <!-- 刷新 -->
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+
+</div>
+<!--  菜单主体 end  -->
+</body>
+
+</html>

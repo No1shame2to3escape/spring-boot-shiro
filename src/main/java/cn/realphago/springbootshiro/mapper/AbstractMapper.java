@@ -13,24 +13,35 @@ import java.util.Map;
  */
 public interface AbstractMapper<T> {
 
+    //添加
     Integer create(T t);
 
     Integer create(Map map);
 
+    //删除
     Integer delete(T t);
 
     Integer delete(Map map);
 
+    Integer delete(String id);
+
+    Integer deleteAll();
+
+    //更新
     Integer update(T t);
 
     Integer update(Map map);
 
-    List<T> findList(PageBean pageBean);
+    //分页查询
+    List<T> findList(@Param("pageBean") PageBean pageBean, @Param("addtionParamMap") Map<String, Object> addtionParamMap);
 
-    Integer findTotalCount(@Param("parameterMap") Map<String, Object> parameterMap);
+    //查找记录总数
+    Integer findTotalCount(@Param("addtionParamMap") Map<String, Object> addtionParamMap);
 
+    //查找（id)
     T findElementById(String id);
 
+    //查找（name)
     T findElementByName(String name);
 
 }

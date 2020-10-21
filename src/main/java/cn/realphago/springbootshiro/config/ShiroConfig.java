@@ -36,7 +36,6 @@ public class ShiroConfig {
         resourceMap.put("/lib/layui/**", "anon");
         resourceMap.put("/images/**", "anon");
         resourceMap.put("/user/login", "anon");
-        resourceMap.put("/product/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(resourceMap);
         shiroFilterFactoryBean.setLoginUrl("/");
         return shiroFilterFactoryBean;

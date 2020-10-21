@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.realphago.springbootshiro.mapper.LoginLogMapper">
+
+    <!-- 查找（总记录数） -->
+    <select id="findTotalCount" resultType="int">
+        select count(*)
+        from tab_login_log;
+    </select>
+
+    <!-- 查找（范围时间总记录数） -->
+    <select id="findCountInTime" resultType="int">
+        select count(*)
+        from tab_login_log
+        where login_time &gt;= #{startTime} and login_time &lt;= #{endTime}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="create" parameterType="loginLog">
+        insert into tab_login_log(id,login_time, username)
+        values (#{id}, #{loginTime}, #{username})
+    </insert>
+
+</mapper>

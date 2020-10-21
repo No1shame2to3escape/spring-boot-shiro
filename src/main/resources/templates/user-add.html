@@ -35,7 +35,7 @@
                     <span class="x-red">*</span>登录名
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_username" name="username" required="" lay-verify="required"
+                    <input type="text" id="L_username" name="username" required="" lay-verify="L_username"
                            autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -49,7 +49,7 @@
                     <span class="x-red">*</span>姓名
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_name" name="name" required=""
+                    <input type="text" id="L_name" name="name" required="" lay-verify="L_name"
                            autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -64,22 +64,12 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="gender" id="L_gender">
-                        <option hidden="hidden">性别</option>
                         <option value="1">男</option>
                         <option value="0">女</option>
                     </select>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>性别
-                </div>
-            </div>
-
-            <!-- 角色 -->
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="x-red">*</span>角色</label>
-                <div class="layui-input-block">
-                    <input type="checkbox" name="roles" lay-skin="primary" th:title="${role.roleDesc}" checked=""
-                           th:each="role : ${roleList}" th:value="${role.roleNum}">
                 </div>
             </div>
 
@@ -126,6 +116,7 @@
 
 <!-- 提交js -->
 <script>
+
     layui.use(['form', 'layer'],
         function () {
             $ = layui.jquery;
@@ -134,12 +125,17 @@
 
             //自定义验证规则
             form.verify({
-                nikename: function (value) {
-                    if (value.length < 5) {
-                        return '昵称至少得5个字符啊';
+                L_username: function (value) {
+                    if (value.length < 4) {
+                        return '昵称至少得4个字符啊';
                     }
                 },
-                pass: [/(.+){6,12}$/, '密码必须6到12位'],
+                L_name: function (value) {
+                    if (value.length < 1) {
+                        return '名字至少得1个字符啊';
+                    }
+                },
+                pass: [/(.+){4,12}$/, '密码必须6到12位'],
                 repass: function (value) {
                     if ($('#L_pass').val() != $('#L_repass').val()) {
                         return '两次密码不一致';
@@ -152,29 +148,38 @@
                 function (data) {
 
                     <!-- 异步请求 -->
-                    $.post("/user/create", $("#createForm").serialize(), function (resultInf) {
-                        if (resultInf.flag) {
-                            layer.alert(resultInf.msg, {
+                    $.post("/user/create", $("#createForm").serialize(), function (resultInfo) {
+                        switch (resultInfo.status) {
+                            case 200:
+                                layer.alert(resultInfo.data, function () {
+                                    xadmin.close();
+                                    xadmin.father_reload();
+                                });
+                                break;
+                            case 400:
+                                layer.alert(resultInfo.data, function () {
+                                    xadmin.close();
+                                    xadmin.father_reload();
+                                });
+                                break;
+                            default:
+                                alert("数据错误");
+                        }
+                    }, "json").error(
+                        function (xhr, status, info) {
+                            layer.alert("请求失败，请传入正确值并重新尝试", {
                                 icon: 6
                             }, function () {
-                                //关闭当前frame
-                                xadmin.close();
-
-                                // 可以对父窗口进行刷新
-                                xadmin.father_reload();
-                            });
-                        } else {
-                            layer.alert(resultInf.msg, {
-                                icon: 6
-                            }, function () {
+                                location.reload();
                             });
                         }
-                    }, "json");
+                    );
 
                     return false;
 
                 });
 
-        });</script>
+        });
+</script>
 
 </html>

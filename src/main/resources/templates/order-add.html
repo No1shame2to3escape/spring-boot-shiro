@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加订单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/theme5.css"> -->
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<body>
+
+<div class="layui-fluid">
+
+    <div class="layui-row">
+        <form class="layui-form" id="createForm">
+
+            <div class="layui-form-item">
+                <label for="L_recipient" class="layui-form-label">
+                    <span class="x-red">*</span>收货人</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_recipient" name="recipient"
+                           required="" lay-verify="required" autocomplete="off" class="layui-input"
+                           maxlength="12" value="小明"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_phone" class="layui-form-label">
+                    <span class="x-red">*</span>手机号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_phone" name="phone" required=""
+                           lay-verify="phone" autocomplete="off" class="layui-input" value="13067130069"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">省/市/县</label>
+                <div class="layui-input-inline">
+                    <select class="layui-input" id="provinceId" name="provinceId">
+                        <option th:value="${baseArea.code}">福建</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="layui-input" id="cityId" name="cityId">
+                        <option th:each="cityArea : ${baseArea.subAreas}" th:value="${cityArea.code}"
+                                th:text="${cityArea.name}" th:if="${cityArea.name == '厦门市'}">厦门
+                        </option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="layui-input" id="countyId" name="countyId"
+                            th:each="cityArea : ${baseArea.subAreas}" th:if="${cityArea.name == '厦门市'}">
+                        <option th:value="${countyArea.code}" th:each="countyArea : ${cityArea.subAreas}"
+                                th:text="${countyArea.name}">思明
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_address" class="layui-form-label">
+                    <span class="x-red">*</span>详细地址</label>
+                <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" id="L_address"
+                                      name="address" class="layui-textarea" maxlength="30" required
+                            >美丽厦门鹭江道</textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_logistics" class="layui-form-label">
+                    <span class="x-red">*</span>配送物流</label>
+                <div class="layui-input-inline">
+                    <select id="L_logistics" name="logistics" class="valid">
+                        <option value="0">申通物流</option>
+                        <option value="1">顺丰物流</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_payType" class="layui-form-label">
+                    <span class="x-red">*</span>支付方式</label>
+                <div class="layui-input-inline">
+                    <select id="L_payType" name="payType">
+                        <option value="0">支付宝</option>
+                        <option value="1">微信</option>
+                        <option value="2">货到付款</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_status" class="layui-form-label">
+                    <span class="x-red">*</span>订单状态</label>
+                <div class="layui-input-inline">
+                    <select id="L_status" name="status">
+                        <option value="0">未付款</option>
+                        <option value="1">已付款</option>
+                        <option value="2">未发货</option>
+                        <option value="3">已发货</option>
+                        <option value="4">已签收</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="L_product" class="layui-form-label">商品增加</label>
+                <div class="layui-input-block">
+                    <table class="layui-table"
+                           th:if="${productList.elements != null and productList.elements.size() > 0}">
+                        <thead id="L_product">
+                        <th>商品</th>
+                        <th>价格</th>
+                        <th>操作</th>
+                        </thead>
+                        <tbody>
+                        <tr th:each="element : ${productList.elements}">
+                            <input type="hidden" name="productNum" th:value="${element.productNum}"/>
+                            <td th:text="${element.name}">商品名</td>
+                            <td th:text="${element.price}">价格</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <a class="layui-btn"
+                                       style="padding: 0px; width: 30px; border-radius: 100%;"
+                                       th:onclick="delProductCount([[${element.productNum}]])">-</a>
+                                </div>
+                                <div class="layui-input-inline" style="width: 40px;">
+                                    <input class="layui-input" type="text" value="1"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           style="padding: 0px; text-align: center;" maxlength="3" minlength="1"
+                                           onblur="defaultProductCount(this)"
+                                           th:id="${element.productNum}" name="count"/>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <a class="layui-btn"
+                                       style="padding: 0px; width: 30px; border-radius: 100%;"
+                                       th:onclick="addProductCount([[${element.productNum}]])">
+                                        <i class="iconfont">&#xe6b9;</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p th:if="${productList.elements == null or productList.elements.size() == 0}"
+                       style="text-align: center; padding-top: 10px; padding-bottom: 10px; font-size: 20px; color: red;">
+                        请保证有产品上架</p>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label for="L_comment" class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" id="L_comment"
+                                      name="comment" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_comment" class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+</body>
+
+<!-- 数据提交js -->
+<script>
+
+    layui.use(['form', 'layer'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            //监听提交
+            form.on('submit(add)',
+                function (data) {
+
+                    var order = {};
+                    order['recipient'] = document.getElementById("L_recipient").value;
+                    order['phone'] = document.getElementById("L_phone").value;
+                    order['provinceId'] = document.getElementById("provinceId").value;
+                    order['cityId'] = document.getElementById("cityId").value;
+                    order['countyId'] = document.getElementById("countyId").value;
+                    order['address'] = document.getElementById("L_address").value;
+                    order['logistics'] = document.getElementById("L_logistics").value;
+                    order['payType'] = document.getElementById("L_payType").value;
+                    order['status'] = document.getElementById("L_status").value;
+                    order['comment'] = document.getElementById("L_comment").value;
+
+                    var productNums = document.getElementsByName('productNum');
+                    var counts = document.getElementsByName('count');
+
+                    for (var i = 0; i < productNums.length; i++) {
+                        order['productNum' + i] = productNums[i].value;
+                        order['count' + i] = counts[i].value;
+                    }
+
+                    $.post("/order/create", order, function (success) {
+                        layer.alert(success.data, {
+                            icon: 6
+                        }, function () {
+                            //关闭当前frame
+                            xadmin.close();
+
+                            // 可以对父窗口进行刷新
+                            xadmin.father_reload();
+                        });
+                    }, "json").error(
+                        function (xhr, status, info) {
+                            layer.alert("请求失败，请传入正确值并重新尝试", {
+                                icon: 6
+                            }, function () {
+                                location.reload();
+                            });
+                        }
+                    );
+
+                    return false;
+
+                });
+
+        });
+
+    function defaultProductCount(obj) {
+        if (obj.value == "") {
+            obj.value = 0;
+        }
+    }
+
+    function addProductCount(id) {
+        if (parseInt(document.getElementById(id).value) < 999) {
+            document.getElementById(id).value = parseInt(document.getElementById(id).value) + 1;
+        }
+    }
+
+    function delProductCount(id) {
+        if (parseInt(document.getElementById(id).value) > 0) {
+            document.getElementById(id).value = parseInt(document.getElementById(id).value) - 1;
+        }
+    }
+
+
+</script>
+
+</html>

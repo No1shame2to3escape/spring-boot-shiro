@@ -21,4 +21,6 @@ public interface UserMapper extends AbstractMapper<User> {
     //更新（id,status）
     Integer updateStatus(@Param("id") String id, @Param("status") Integer status);
 
+    User findElementByUserNum(String userNum);
+
 }

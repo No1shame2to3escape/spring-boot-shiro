@@ -24,24 +24,29 @@ public class PageBeanUtils<T> {
         this.mapper = mapper;
     }
 
-    public PageBean<T> findList(PageBean pageBean) {
+    public PageBean<T> findList(PageBean pageBean, Map<String, Object> addtionParamMap) {
         PageBean<T> tPageBean = new PageBean<T>();
         tPageBean.setPageSize(pageBean.getPageSize());
         tPageBean.setCurrentPage(pageBean.getCurrentPage());
-        tPageBean.setTotalCount(mapper.findTotalCount(pageBean.getParameterMap()));
+        Integer totalCount = mapper.findTotalCount(pageBean.getParameterMap());
+        if (totalCount == 0) return null;
+        tPageBean.setTotalCount(totalCount);
         tPageBean.setTotalPage(tPageBean.getTotalCount() % tPageBean.getPageSize() == 0 ? tPageBean.getTotalCount() / tPageBean.getPageSize() : tPageBean.getTotalCount() / tPageBean.getPageSize() + 1);
+        if (StringUtils.isEmpty(pageBean.getCurrentPage()) || pageBean.getCurrentPage() <= 0) {
+            pageBean.setCurrentPage(1);
+        }
         if (pageBean.getCurrentPage() > tPageBean.getTotalPage()) {
             pageBean.setCurrentPage(tPageBean.getTotalPage());
             tPageBean.setCurrentPage(tPageBean.getTotalPage());
         }
         pageBean.setPageStart((pageBean.getCurrentPage() - 1) * pageBean.getPageSize());
         tPageBean.setPageStart((pageBean.getCurrentPage() - 1) * pageBean.getPageSize());
-        tPageBean.setElements(mapper.findList(pageBean));
+        tPageBean.setElements(mapper.findList(pageBean, addtionParamMap));
         tPageBean.setParameterMap(pageBean.getParameterMap());
         return tPageBean;
     }
 
-    public PageBean<T> findAll(Integer currentPage, Integer pageSize, PageBeanService<T> service, Map<String, Object> parameterMap) {
+    public PageBean<T> findAll(Integer currentPage, Integer pageSize, PageBeanService<T> service, Map<String, Object> addtionParamMap) {
         PageBean parameterPageBean = new PageBean();
         if (StringUtils.isEmpty(currentPage) || currentPage <= 0) {
             currentPage = 1;
@@ -51,10 +56,10 @@ public class PageBeanUtils<T> {
             pageSize = 5;
         }
         parameterPageBean.setPageSize(pageSize);
-        if (parameterMap != null) {
-            parameterPageBean.setParameterMap(parameterMap);
+        if (addtionParamMap != null) {
+            parameterPageBean.setParameterMap(addtionParamMap);
         }
-        return service.findList(parameterPageBean);
+        return service.findList(parameterPageBean, addtionParamMap);
     }
 
 }
